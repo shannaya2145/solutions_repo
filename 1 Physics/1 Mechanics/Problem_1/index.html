@@ -48,8 +48,6 @@
 <ul class="current">
 <li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
 <ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="#projectile-motion-notes">Projectile Motion Notes</a>
-</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Problem_2/">Problem 2</a>
@@ -174,36 +172,103 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
-<h3 id="projectile-motion-notes"><strong>Projectile Motion Notes</strong></h3>
-<p><strong>Definition:</strong>
-Projectile motion is the motion of an object thrown into the air, influenced by gravity, with both horizontal and vertical motion components.</p>
-<p><strong>Key Characteristics:</strong>
-1. <strong>Two Motion Components</strong>:
-   - <strong>Horizontal motion</strong>: Constant velocity (no acceleration).
-   - <strong>Vertical motion</strong>: Accelerated motion due to gravity (9.8 m/s² downward).</p>
-<ol>
-<li><strong>Trajectory</strong>: The path followed by the object is a <strong>parabola</strong>.</li>
-</ol>
-<p><strong>Important Terms</strong>:
-1. <strong>Initial velocity (u)</strong>: The speed and direction at which the object is launched.
-2. <strong>Launch angle (θ)</strong>: The angle at which the object is launched relative to the horizontal.
-3. <strong>Time of flight (T)</strong>: Total time the object is in the air.
-4. <strong>Maximum height (H)</strong>: Highest point reached by the object.
-5. <strong>Range (R)</strong>: The horizontal distance the object travels before hitting the ground.</p>
-<p><strong>Equations</strong> (assuming no air resistance):
-1. <strong>Horizontal motion</strong>:
-   - <span class="arithmatex">\( x = u_x \cdot t \)</span> (where <span class="arithmatex">\( u_x \)</span> is horizontal velocity).
-2. <strong>Vertical motion</strong>:
-   - <span class="arithmatex">\( y = u_y \cdot t - \frac{1}{2} g t^2 \)</span> (where <span class="arithmatex">\( u_y \)</span> is the vertical component of initial velocity, and <span class="arithmatex">\( g \)</span> is acceleration due to gravity).</p>
-<p><strong>Key Concepts</strong>:
-- <strong>Horizontal velocity</strong>: <span class="arithmatex">\( u_x = u \cdot \cos(\theta) \)</span>.
-- <strong>Vertical velocity</strong>: <span class="arithmatex">\( u_y = u \cdot \sin(\theta) \)</span>.</p>
-<p><strong>Maximum Height</strong>: 
-[ H = \frac{u_y^2}{2g} ]</p>
-<p><strong>Range</strong>:
-[ R = \frac{u^2 \cdot \sin(2\theta)}{g} ]</p>
-<p><strong>Example Problems</strong>: 
-Use the equations to calculate time of flight, maximum height, and range based on initial velocity and launch angle.</p>
+<h1 id="projectile-motion-is-when-something-is-thrown-and-moves-in-a-curved-path-due-to-gravity-it-moves-forward-at-a-steady-speed-and-falls-downward-forming-a-parabola-here-are-the-key-formulas">Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas:</h1>
+<ul>
+<li><strong>Horizontal distance</strong>: $ x = v_x \cdot t$ (where <span class="arithmatex">\(v_x\)</span> is horizontal speed, <span class="arithmatex">\(t\)</span> is time)</li>
+<li><strong>Vertical height</strong>: <span class="arithmatex">\(y = v_y \cdot t - \frac{1}{2} g t^2\)</span> (where <span class="arithmatex">\(v_y\)</span> is initial vertical speed, <span class="arithmatex">\(g\)</span> is 9.8 m/s²)</li>
+<li><strong>Time of flight</strong> (for level ground): <span class="arithmatex">\(t = \frac{2 v_y}{g}\)</span></li>
+<li><strong>Range</strong> (max distance): <span class="arithmatex">\(R = \frac{v^2 \sin(2\theta)}{g}\)</span> (where <span class="arithmatex">\(v\)</span> is initial speed, <span class="arithmatex">\(\theta\)</span> is launch angle)</li>
+</ul>
+<p>The starting speed, angle, and gravity control how far and high it goes, like a thrown ball.</p>
+<p>Below is a concise Markdown document with an embedded Python script that addresses your investigation into the range of a projectile as a function of the angle of projection. It includes the theoretical foundation, analysis, practical applications, and visualizations as requested.</p>
+<hr/>
+<h1 id="investigating-the-range-as-a-function-of-the-angle-of-projection">Investigating the Range as a Function of the Angle of Projection</h1>
+<h2 id="motivation">Motivation</h2>
+<p>Projectile motion combines simplicity with depth, revealing how initial conditions shape trajectories. This investigation focuses on how the range depends on the projection angle, exploring a versatile framework applicable to sports, engineering, and beyond.</p>
+<h2 id="1-theoretical-foundation">1. Theoretical Foundation</h2>
+<p>Projectile motion arises from Newton’s laws under gravity alone. For an object launched at speed <span class="arithmatex">\(v\)</span> and angle <span class="arithmatex">\(\theta\)</span> from a flat surface:</p>
+<ul>
+<li><strong>Horizontal motion</strong>: <span class="arithmatex">\(\ddot{x} = 0\)</span>, so <span class="arithmatex">\(x = v \cos(\theta) t\)</span>.</li>
+<li><strong>Vertical motion</strong>: <span class="arithmatex">\(\ddot{y} = -g\)</span>, integrating gives <span class="arithmatex">\(y = v \sin(\theta) t - \frac{1}{2} g t^2\)</span>.</li>
+</ul>
+<p>The time of flight occurs when <span class="arithmatex">\(y = 0\)</span>:
+<span class="arithmatex">\(<span class="arithmatex">\(0 = v \sin(\theta) t - \frac{1}{2} g t^2\)</span>\)</span>
+<span class="arithmatex">\(<span class="arithmatex">\(t (v \sin(\theta) - \frac{1}{2} g t) = 0\)</span>\)</span>
+<span class="arithmatex">\(<span class="arithmatex">\(t = \frac{2 v \sin(\theta)}{g}\)</span>\)</span> (non-zero solution).</p>
+<p><span class="arithmatex">\(Range\)</span> <span class="arithmatex">\(<span class="arithmatex">\(R\)</span>\)</span> is the horizontal distance at landing:</p>
+<div class="arithmatex">\[R = v \cos(\theta) \cdot \frac{2 v \sin(\theta)}{g} = \frac{2 v^2 \sin(\theta) \cos(\theta)}{g}$$
+Using the identity $\sin(2\theta) = 2 \sin(\theta) \cos(\theta)$:
+$$R = \frac{v^2 \sin(2\theta)}{g}\]</div>
+<p>This family of solutions varies with <span class="arithmatex">\(v\)</span>, <span class="arithmatex">\(\theta\)</span>, and <span class="arithmatex">\(g\)</span>, describing diverse trajectories.</p>
+<h2 id="2-analysis-of-the-range">2. Analysis of the Range</h2>
+<ul>
+<li><strong>Angle Dependence</strong>: <span class="arithmatex">\(R\)</span> peaks at <span class="arithmatex">\(\theta = 45^\circ\)</span> where <span class="arithmatex">\(\sin(2\theta) = 1\)</span>, maximizing range. At <span class="arithmatex">\(0^\circ\)</span> or <span class="arithmatex">\(90^\circ\)</span>, <span class="arithmatex">\(R = 0\)</span>.</li>
+<li><strong>Other Parameters</strong>:</li>
+<li><strong>Initial Velocity (<span class="arithmatex">\(v\)</span>)</strong>: <span class="arithmatex">\(R \propto v^2\)</span>, so doubling <span class="arithmatex">\(v\)</span> quadruples <span class="arithmatex">\(R\)</span>.</li>
+<li><strong>Gravity (<span class="arithmatex">\(g\)</span>)</strong>: <span class="arithmatex">\(R \propto \frac{1}{g}\)</span>, so lower gravity (e.g., Moon) increases range.</li>
+</ul>
+<h2 id="3-practical-applications">3. Practical Applications</h2>
+<ul>
+<li><strong>Sports</strong>: Optimizing a javelin throw’s angle for maximum distance.</li>
+<li><strong>Engineering</strong>: Artillery or rocket launches adjust for terrain or wind.</li>
+<li><strong>Astrophysics</strong>: Trajectories on other planets with varying <span class="arithmatex">\(g\)</span>.</li>
+</ul>
+<h2 id="4-implementation">4. Implementation</h2>
+<p>Below is a Python script simulating and visualizing the range vs. angle for different conditions.</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+g_earth = 9.8  # m/s^2
+g_moon = 1.62  # m/s^2
+v1, v2 = 20, 30  # initial velocities (m/s)
+angles = np.arange(0, 91, 1)  # angles from 0 to 90 degrees
+theta_rad = np.radians(angles)
+
+# Range function
+def range_proj(v, theta, g):
+    return (v**2 * np.sin(2 * theta)) / g
+
+# Calculate ranges
+R_v1_earth = range_proj(v1, theta_rad, g_earth)
+R_v2_earth = range_proj(v2, theta_rad, g_earth)
+R_v1_moon = range_proj(v1, theta_rad, g_moon)
+
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.plot(angles, R_v1_earth, label=f'v = {v1} m/s, g = {g_earth} m/s² (Earth)')
+plt.plot(angles, R_v2_earth, label=f'v = {v2} m/s, g = {g_earth} m/s² (Earth)')
+plt.plot(angles, R_v1_moon, label=f'v = {v1} m/s, g = {g_moon} m/s² (Moon)')
+plt.xlabel('Angle of Projection (degrees)')
+plt.ylabel('Range (meters)')
+plt.title('Range vs. Angle of Projection')
+plt.legend()
+plt.grid(True)
+plt.show()
+</code></pre>
+<h3 id="output">Output</h3>
+<ul>
+<li><strong>Graph</strong>: Shows range vs. angle for <span class="arithmatex">\(v = 20 \, \text{m/s}\)</span> and <span class="arithmatex">\(30 \, \text{m/s}\)</span> on Earth, and <span class="arithmatex">\(v = 20 \, \text{m/s}\)</span> on the Moon.</li>
+<li><strong>Observations</strong>:</li>
+<li>Max range at <span class="arithmatex">\(45^\circ\)</span>.</li>
+<li>Higher <span class="arithmatex">\(v\)</span> increases range significantly.</li>
+<li>Lower <span class="arithmatex">\(g\)</span> (Moon) extends range dramatically.</li>
+</ul>
+<h2 id="discussion">Discussion</h2>
+<h3 id="limitations">Limitations</h3>
+<ul>
+<li><strong>Idealized Model</strong>: Assumes no air resistance, flat terrain, and constant gravity.</li>
+<li><strong>Realistic Factors</strong>: Drag reduces range, especially at high speeds; wind alters trajectories; uneven ground changes landing points.</li>
+</ul>
+<h3 id="suggestions">Suggestions</h3>
+<ul>
+<li><strong>Incorporate Drag</strong>: Add a term like <span class="arithmatex">\(-k v\)</span> to the equations, solved numerically.</li>
+<li><strong>Wind</strong>: Adjust horizontal velocity with a wind component.</li>
+<li><strong>Height</strong>: Modify equations for initial height <span class="arithmatex">\(h\)</span>, affecting time of flight.</li>
+</ul>
+<p>This model bridges theory and application, adaptable to complex scenarios with computational tools.</p>
+<hr/>
+<p>This delivers a compact yet comprehensive analysis, with code to visualize the concepts. Let me know if you’d like to expand any section!</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
