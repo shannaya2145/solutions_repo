@@ -48,6 +48,32 @@
 <ul class="current">
 <li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#projectile-motion-is-when-something-is-thrown-and-moves-in-a-curved-path-due-to-gravity-it-moves-forward-at-a-steady-speed-and-falls-downward-forming-a-parabola-here-are-the-key-formulas">Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#investigating-the-range-as-a-function-of-the-angle-of-projection">Investigating the Range as a Function of the Angle of Projection</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#motivation">Motivation</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#1-theoretical-foundation">1. Theoretical Foundation</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#2-analysis-of-the-range">2. Analysis of the Range</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#3-practical-applications">3. Practical Applications</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#4-implementation">4. Implementation</a>
+<ul>
+<li class="toctree-l4"><a class="reference internal" href="#output">Output</a>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#discussion">Discussion</a>
+<ul>
+<li class="toctree-l4"><a class="reference internal" href="#limitations">Limitations</a>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#suggestions">Suggestions</a>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../Problem_2/">Problem 2</a>
@@ -172,9 +198,9 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
-<h1 id="projectile-motion-is-when-something-is-thrown-and-moves-in-a-curved-path-due-to-gravity-it-moves-forward-at-a-steady-speed-and-falls-downward-forming-a-parabola-here-are-the-key-formulas">Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas:</h1>
+<h2 id="projectile-motion-is-when-something-is-thrown-and-moves-in-a-curved-path-due-to-gravity-it-moves-forward-at-a-steady-speed-and-falls-downward-forming-a-parabola-here-are-the-key-formulas">Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas</h2>
 <ul>
-<li><strong>Horizontal distance</strong>: $ x = v_x \cdot t$ (where <span class="arithmatex">\(v_x\)</span> is horizontal speed, <span class="arithmatex">\(t\)</span> is time)</li>
+<li><strong>Horizontal distance</strong>: <span class="arithmatex">\(x = v_x \cdot t\)</span> (where <span class="arithmatex">\(v_x\)</span> is horizontal speed, <span class="arithmatex">\(t\)</span> is time)</li>
 <li><strong>Vertical height</strong>: <span class="arithmatex">\(y = v_y \cdot t - \frac{1}{2} g t^2\)</span> (where <span class="arithmatex">\(v_y\)</span> is initial vertical speed, <span class="arithmatex">\(g\)</span> is 9.8 m/s²)</li>
 <li><strong>Time of flight</strong> (for level ground): <span class="arithmatex">\(t = \frac{2 v_y}{g}\)</span></li>
 <li><strong>Range</strong> (max distance): <span class="arithmatex">\(R = \frac{v^2 \sin(2\theta)}{g}\)</span> (where <span class="arithmatex">\(v\)</span> is initial speed, <span class="arithmatex">\(\theta\)</span> is launch angle)</li>
@@ -182,7 +208,7 @@
 <p>The starting speed, angle, and gravity control how far and high it goes, like a thrown ball.</p>
 <p>Below is a concise Markdown document with an embedded Python script that addresses your investigation into the range of a projectile as a function of the angle of projection. It includes the theoretical foundation, analysis, practical applications, and visualizations as requested.</p>
 <hr/>
-<h1 id="investigating-the-range-as-a-function-of-the-angle-of-projection">Investigating the Range as a Function of the Angle of Projection</h1>
+<h2 id="investigating-the-range-as-a-function-of-the-angle-of-projection">Investigating the Range as a Function of the Angle of Projection</h2>
 <h2 id="motivation">Motivation</h2>
 <p>Projectile motion combines simplicity with depth, revealing how initial conditions shape trajectories. This investigation focuses on how the range depends on the projection angle, exploring a versatile framework applicable to sports, engineering, and beyond.</p>
 <h2 id="1-theoretical-foundation">1. Theoretical Foundation</h2>
