@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Motion Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid black;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Projectile Motion Animation</h1>
+    <div class="controls">
+        <label for="velocity">Initial Velocity (m/s): </label>
+        <input type="number" id="velocity" value="15" min="1" step="1">
+        <br><br>
+        <label for="angle">Angle (degrees): </label>
+        <input type="number" id="angle" value="45" min="0" max="90" step="1">
+        <br><br>
+        <button onclick="startSimulation()">Launch</button>
+    </div>
+
+    <canvas id="animationCanvas" width="800" height="400"></canvas>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('animationCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Constants
+        const g = 9.81; // Gravitational acceleration (m/s²)
+        const scale = 20; // Pixels per meter
+
+        // Animation variables
+        let x = 0, y = 0, t = 0, vx, vy, range, maxHeight, animationFrameId;
+
+        function calculateTrajectory(v0, thetaDeg) {
+            const theta = thetaDeg * Math.PI / 180;
+            vx = v0 * Math.cos(theta);
+            vy = v0 * Math.sin(theta);
+            const tFlight = (2 * vy) / g;
+            range = vx * tFlight;
+            maxHeight = (vy * vy) / (2 * g);
+            console.log(`v0: ${v0} m/s, θ: ${thetaDeg}°, Range: ${range.toFixed(2)} m, Max Height: ${maxHeight.toFixed(2)} m`);
+            return { tFlight, range, maxHeight };
+        }
+
+        function drawScene() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid for reference (every 1 meter)
+            ctx.strokeStyle = '#ddd';
+            for (let i = 0; i < canvas.width; i += scale) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < canvas.height; i += scale) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+
+            // Draw ground
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - scale);
+            ctx.lineTo(canvas.width, canvas.height - scale);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw projectile (larger and brighter for visibility)
+            ctx.beginPath();
+            const canvasY = canvas.height - scale - y * scale; // Ground at scale height
+            ctx.arc(x * scale, canvasY, 10, 0, Math.PI * 2); // Larger radius
+            ctx.fillStyle = 'blue';
+            ctx.fill();
+            console.log(`Drawing at x: ${(x * scale).toFixed(2)}, y: ${canvasY.toFixed(2)}`);
+        }
+
+        function animate() {
+            // Update position
+            t += 0.02;
+            x = vx * t;
+            y = vy * t - 0.5 * g * t * t;
+
+            // Draw current frame
+            drawScene();
+
+            // Continue if above ground and within canvas
+            if (y >= 0 && x * scale < canvas.width) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                console.log("Animation stopped");
+                cancelAnimationFrame(animationFrameId);
+                x = 0;
+                y = 0;
+                t = 0;
+                drawScene(); // Reset to start
+            }
+        }
+
+        function startSimulation() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            const v0 = parseFloat(document.getElementById('velocity').value);
+            const theta = parseFloat(document.getElementById('angle').value);
+
+            if (isNaN(v0) || v0 <= 0 || isNaN(theta) || theta < 0 || theta > 90) {
+                alert("Please enter valid values: v0 > 0, 0 ≤ θ ≤ 90");
+                return;
+            }
+
+            x = 0;
+            y = 0;
+            t = 0;
+            calculateTrajectory(v0, theta);
+            animate();
+        }
+
+        // Initial draw
+        drawScene();
+    </script>
+</body>
+</html>
