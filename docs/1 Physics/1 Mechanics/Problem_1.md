@@ -1,4 +1,5 @@
 # Problem 1
+[Simulation](Simulation.Projectile.HTML)
 
 ## Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas
 
