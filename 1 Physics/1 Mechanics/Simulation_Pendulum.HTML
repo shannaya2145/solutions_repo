@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forced Damped Pendulum Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid black;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Forced Damped Pendulum Animation</h1>
+    <div class="controls">
+        <label for="damping">Damping Coefficient (b, s⁻¹): </label>
+        <input type="number" id="damping" value="0.2" min="0" max="2" step="0.1">
+        <br><br>
+        <label for="force">Driving Amplitude (F, s⁻²): </label>
+        <input type="number" id="force" value="1.5" min="0" max="5" step="0.1">
+        <br><br>
+        <label for="frequency">Driving Frequency (ωd, rad/s): </label>
+        <input type="number" id="frequency" value="1.4" min="0.5" max="5" step="0.1">
+        <br><br>
+        <button onclick="startSimulation()">Start</button>
+        <button onclick="stopSimulation()">Stop</button>
+    </div>
+
+    <canvas id="pendulumCanvas" width="600" height="400"></canvas>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('pendulumCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Constants
+        const g = 9.81; // Gravitational acceleration (m/s²)
+        const L = 1.0;  // Pendulum length (m)
+        const scale = 150; // Pixels per meter for visualization
+        const originX = canvas.width / 2;
+        const originY = canvas.height / 4;
+
+        // Simulation variables
+        let theta = 0.1; // Initial angle (rad)
+        let thetaDot = 0; // Initial angular velocity (rad/s)
+        let t = 0; // Time (s)
+        let animationFrameId = null;
+        let b, F, omega_d;
+
+        // Numerical integration (Euler method)
+        function updatePendulum(dt) {
+            const thetaDotDot = -b * thetaDot - (g / L) * Math.sin(theta) + F * Math.cos(omega_d * t);
+            thetaDot += thetaDotDot * dt;
+            theta += thetaDot * dt;
+            t += dt;
+        }
+
+        // Draw pendulum
+        function drawPendulum() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw pivot point
+            ctx.beginPath();
+            ctx.arc(originX, originY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'black';
+            ctx.fill();
+
+            // Calculate bob position
+            const x = originX + scale * L * Math.sin(theta);
+            const y = originY + scale * L * Math.cos(theta);
+
+            // Draw rod
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = 'gray';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw bob
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, Math.PI * 2);
+            ctx.fillStyle = 'blue';
+            ctx.fill();
+
+            // Optional: Log state for debugging
+            console.log(`t: ${t.toFixed(2)}s, θ: ${theta.toFixed(2)}rad, dθ/dt: ${thetaDot.toFixed(2)}rad/s`);
+        }
+
+        // Animation loop
+        function animate() {
+            updatePendulum(0.02); // Time step of 0.02s
+            drawPendulum();
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        // Start simulation
+        function startSimulation() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            // Get input values
+            b = parseFloat(document.getElementById('damping').value);
+            F = parseFloat(document.getElementById('force').value);
+            omega_d = parseFloat(document.getElementById('frequency').value);
+
+            // Validate inputs
+            if (isNaN(b) || b < 0 || isNaN(F) || F < 0 || isNaN(omega_d) || omega_d <= 0) {
+                alert("Please enter valid values: b ≥ 0, F ≥ 0, ωd > 0");
+                return;
+            }
+
+            // Reset initial conditions
+            theta = 0.1;
+            thetaDot = 0;
+            t = 0;
+
+            // Start animation
+            drawPendulum(); // Initial draw
+            animate();
+        }
+
+        // Stop simulation
+        function stopSimulation() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+                drawPendulum(); // Leave pendulum in last position
+            }
+        }
+
+        // Initial draw
+        drawPendulum();
+    </script>
+</body>
+</html>
