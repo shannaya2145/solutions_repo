@@ -1,7 +1,7 @@
-# Problem 1
+## Problem 1
 [Simulation](Simulation.Projectile.HTML)
 
-## Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas
+ Projectile motion is when something is thrown and moves in a curved path due to gravity. It moves forward at a steady speed and falls downward, forming a parabola. Here are the key formulas
 
 - **Horizontal distance**: $x = v_x \cdot t$ (where $v_x$ is horizontal speed, $t$ is time)
 - **Vertical height**: $y = v_y \cdot t - \frac{1}{2} g t^2$ (where $v_y$ is initial vertical speed, $g$ is 9.8 m/s²)
@@ -113,6 +113,3 @@ plt.show()
 
 This model bridges theory and application, adaptable to complex scenarios with computational tools.
 
----
-
-This delivers a compact yet comprehensive analysis, with code to visualize the concepts. Let me know if you’d like to expand any section!
