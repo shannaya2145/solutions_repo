@@ -171,7 +171,172 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-1">Problem 1</h1>
+<h2 id="problem-1">Problem 1</h2>
+<p><a href="../Simulation_orbital.HTML">Simulation</a></p>
+<h2 id="orbital-period-and-orbital-radius-exploring-keplers-third-law">Orbital Period and Orbital Radius: Exploring Kepler's Third Law</h2>
+<p>Kepler's Third Law is a fundamental principle in celestial mechanics that links the square of a body’s orbital period (<span class="arithmatex">\(T^2\)</span>) to the cube of its orbital radius (<span class="arithmatex">\(r^3\)</span>). This relationship offers profound insights into gravitational interactions and underpins our understanding of orbits, from satellites to exoplanets. Here, we derive this law for circular orbits, explore its implications, analyze real-world examples, and simulate it computationally.</p>
+<h2 id="1-theoretical-derivation">1. Theoretical Derivation</h2>
+<h3 id="circular-orbits">Circular Orbits</h3>
+<p>For a body in a circular orbit around a central mass <span class="arithmatex">\(M\)</span> (e.g., a planet around a star), two forces balance: the gravitational force and the centripetal force required for circular motion.</p>
+<ul>
+<li>
+<p><strong>Gravitational Force</strong>: 
+ $$
+  F_g = \frac{G M m}{r^2}
+  $$
+  where <span class="arithmatex">\(G\)</span> is the gravitational constant, <span class="arithmatex">\(m\)</span> is the orbiting body’s mass, and <span class="arithmatex">\(r\)</span> is the orbital radius.</p>
+</li>
+<li>
+<p><strong>Centripetal Force</strong>: 
+ $$
+  F_c = \frac{m v^2}{r}
+  $$
+  where <span class="arithmatex">\(v\)</span> is the orbital velocity.</p>
+</li>
+</ul>
+<p>Equating these:
+$$
+\frac{G M m}{r^2} = \frac{m v^2}{r}
+$$
+Cancel <span class="arithmatex">\(m\)</span> (assuming <span class="arithmatex">\(m \neq 0\)</span>) and simplify:
+$$
+\frac{G M}{r^2} = \frac{v^2}{r}
+$$
+$$
+v^2 = \frac{G M}{r}
+$$</p>
+<p>The orbital period <span class="arithmatex">\(T\)</span> is the time for one complete orbit, related to velocity by:
+$$
+v = \frac{2\pi r}{T}
+$$
+Square this:
+$$
+v^2 = \frac{4\pi^2 r^2}{T^2}
+$$
+Substitute into the force balance:
+$$
+\frac{4\pi^2 r^2}{T^2} = \frac{G M}{r}
+$$
+Multiply through by <span class="arithmatex">\(T^2\)</span> and divide by <span class="arithmatex">\(r\)</span>:
+$$
+4\pi^2 r^2 = \frac{G M T^2}{r}
+$$
+$$
+T^2 = \frac{4\pi^2}{G M} r^3
+$$
+Thus:
+$$
+T^2 = k r^3
+$$
+where <span class="arithmatex">\(k = \frac{4\pi^2}{G M}\)</span> is a constant for a given central mass <span class="arithmatex">\(M\)</span>. This is Kepler’s Third Law for circular orbits.</p>
+<h2 id="2-implications-for-astronomy">2. Implications for Astronomy</h2>
+<ul>
+<li><strong>Planetary Masses</strong>: If <span class="arithmatex">\(T\)</span> and <span class="arithmatex">\(r\)</span> are measured for a satellite or moon, <span class="arithmatex">\(M\)</span> of the central body can be calculated:
+ $$
+  M = \frac{4\pi^2 r^3}{G T^2}
+  $$</li>
+<li><strong>Distances</strong>: For known <span class="arithmatex">\(M\)</span> (e.g., the Sun), measuring <span class="arithmatex">\(T\)</span> determines <span class="arithmatex">\(r\)</span>.</li>
+<li><strong>System Consistency</strong>: The law holds across a planetary system, enabling comparisons (e.g., Earth vs. Mars orbits).</li>
+</ul>
+<h2 id="3-real-world-examples">3. Real-World Examples</h2>
+<ul>
+<li><strong>Moon around Earth</strong>:</li>
+<li><span class="arithmatex">\(r \approx 384,400\)</span> km = <span class="arithmatex">\(3.844 \times 10^8\)</span> m.</li>
+<li><span class="arithmatex">\(T \approx 27.32\)</span> days = <span class="arithmatex">\(2.36 \times 10^6\)</span> s.</li>
+<li><span class="arithmatex">\(M_{\text{Earth}} \approx 5.972 \times 10^{24}\)</span> kg.</li>
+<li>
+<p>Check: <span class="arithmatex">\(T^2 = (2.36 \times 10^6)^2 \approx 5.57 \times 10^{12}\)</span>, <span class="arithmatex">\(r^3 = (3.844 \times 10^8)^3 \approx 5.67 \times 10^{25}\)</span>, ratio consistent with <span class="arithmatex">\(k\)</span>.</p>
+</li>
+<li>
+<p><strong>Earth around Sun</strong>:</p>
+</li>
+<li><span class="arithmatex">\(r \approx 1\)</span> AU = <span class="arithmatex">\(1.496 \times 10^{11}\)</span> m.</li>
+<li><span class="arithmatex">\(T \approx 365.25\)</span> days = <span class="arithmatex">\(3.156 \times 10^7\)</span> s.</li>
+<li><span class="arithmatex">\(M_{\text{Sun}} \approx 1.989 \times 10^{30}\)</span> kg.</li>
+<li>Verified similarly.</li>
+</ul>
+<h2 id="4-implementation">4. Implementation</h2>
+<h3 id="python-simulation">Python Simulation</h3>
+<p>This script simulates circular orbits and plots <span class="arithmatex">\(T^2\)</span> vs. <span class="arithmatex">\(r^3\)</span>:</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11  # m³ kg⁻¹ s⁻²
+M_sun = 1.989e30  # kg (Sun)
+M_earth = 5.972e24  # kg (Earth)
+
+# Orbital period function
+def orbital_period(r, M):
+    return np.sqrt((4 * np.pi**2 * r**3) / (G * M))
+
+# Data for simulation
+r_values = np.logspace(7, 11, 100)  # 10^7 to 10^11 m
+T_sun = orbital_period(r_values, M_sun) / (24 * 3600)  # Convert to days
+T_earth = orbital_period(r_values, M_earth) / (24 * 3600)
+
+# Real-world examples
+moon_r = 3.844e8  # m
+moon_T = 27.32  # days
+earth_r = 1.496e11  # m
+earth_T = 365.25  # days
+
+# Plotting
+plt.figure(figsize=(12, 6))
+
+# Circular orbit visualization
+plt.subplot(1, 2, 1)
+theta = np.linspace(0, 2 * np.pi, 100)
+for r in [moon_r, earth_r / 100]:  # Scaled for visibility
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    plt.plot(x, y, lw=1)
+plt.plot(0, 0, 'yo', label="Central Mass")
+plt.title("Circular Orbits (Scaled)")
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.legend()
+plt.axis("equal")
+
+# T² vs r³
+plt.subplot(1, 2, 2)
+plt.loglog(r_values**3, T_sun**2, 'b-', label="Sun (Planets)")
+plt.loglog(r_values**3, T_earth**2, 'g-', label="Earth (Satellites)")
+plt.loglog([moon_r**3], [moon_T**2], 'ro', label="Moon")
+plt.loglog([earth_r**3], [earth_T**2], 'ko', label="Earth")
+plt.title("T² vs r³ (Kepler's Third Law)")
+plt.xlabel("r³ (m³)")
+plt.ylabel("T² (days²)")
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+<h3 id="output-description">Output Description</h3>
+<ul>
+<li><strong>Left Plot</strong>: Scaled circular orbits (e.g., Moon, Earth-like) around a central mass.</li>
+<li><strong>Right Plot</strong>: Log-log plot of <span class="arithmatex">\(T^2\)</span> vs. <span class="arithmatex">\(r^3\)</span>, showing linearity (slope 1) for Sun and Earth systems, with Moon and Earth data points overlaid.</li>
+</ul>
+<h2 id="deliverables">Deliverables</h2>
+<h3 id="detailed-explanation">Detailed Explanation</h3>
+<ul>
+<li><strong>Derivation</strong>: <span class="arithmatex">\(T^2 \propto r^3\)</span> arises from balancing gravitational and centripetal forces.</li>
+<li><strong>Implications</strong>: Enables mass and distance calculations, foundational for astronomy.</li>
+</ul>
+<h3 id="graphical-representations">Graphical Representations</h3>
+<ul>
+<li><strong>Orbits</strong>: Visualizes circular paths.</li>
+<li><strong><span class="arithmatex">\(T^2\)</span> vs. <span class="arithmatex">\(r^3\)</span></strong>: Confirms the law with real and simulated data.</li>
+</ul>
+<h3 id="extensions-to-elliptical-orbits">Extensions to Elliptical Orbits</h3>
+<p>Kepler’s Third Law generalizes to elliptical orbits using the semi-major axis <span class="arithmatex">\(a\)</span> instead of <span class="arithmatex">\(r\)</span>:
+$$
+T^2 = \frac{4\pi^2}{G M} a^3
+$$
+This holds for planets, comets, and binary stars, with <span class="arithmatex">\(a\)</span> as the average distance. The simulation could be extended by parameterizing elliptical paths.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Kepler’s Third Law elegantly ties orbital period to radius, validated by both theory and simulation. Its applications span from lunar orbits to exoplanet discovery, with extensions to elliptical orbits broadening its scope.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">

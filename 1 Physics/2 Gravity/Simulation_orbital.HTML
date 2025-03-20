@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Period and Radius Animation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Orbital Period and Radius Animation</h1>
+    <div class="controls">
+        <label for="mass">Central Mass (x10³⁰ kg): </label>
+        <input type="number" id="mass" value="1.989" min="0.001" step="0.001">
+        <br><br>
+        <label for="radius1">Orbit 1 Radius (x10⁸ m): </label>
+        <input type="number" id="radius1" value="3.844" min="0.1" step="0.1">
+        <br><br>
+        <label for="radius2">Orbit 2 Radius (x10⁸ m): </label>
+        <input type="number" id="radius2" value="149.6" min="0.1" step="0.1">
+        <br><br>
+        <button onclick="startSimulation()">Start</button>
+        <button onclick="stopSimulation()">Stop</button>
+    </div>
+
+    <canvas id="orbitCanvas" width="600" height="400"></canvas>
+    <canvas id="keplerChart" width="600" height="400"></canvas>
+
+    <script>
+        // Canvas setup for orbits
+        const orbitCanvas = document.getElementById('orbitCanvas');
+        const orbitCtx = orbitCanvas.getContext('2d');
+        const chartCanvas = document.getElementById('keplerChart');
+        const chartCtx = chartCanvas.getContext('2d');
+
+        // Constants
+        const G = 6.67430e-11; // m³ kg⁻¹ s⁻²
+        const scale = 0.0000005; // Adjusted for visibility (pixels/m)
+        const originX = orbitCanvas.width / 2;
+        const originY = orbitCanvas.height / 2;
+
+        // Animation variables
+        let t = 0;
+        let animationFrameId = null;
+        let M, r1, r2;
+
+        // Orbital period function (in seconds)
+        function orbitalPeriod(r, M) {
+            return Math.sqrt((4 * Math.PI**2 * r**3) / (G * M));
+        }
+
+        // Draw orbits and bodies
+        function drawOrbits() {
+            orbitCtx.clearRect(0, 0, orbitCanvas.width, orbitCanvas.height);
+
+            // Draw central mass
+            orbitCtx.beginPath();
+            orbitCtx.arc(originX, originY, 10, 0, Math.PI * 2);
+            orbitCtx.fillStyle = 'yellow';
+            orbitCtx.fill();
+
+            // Orbit paths
+            orbitCtx.strokeStyle = 'gray';
+            orbitCtx.lineWidth = 1;
+            [r1, r2].forEach(r => {
+                orbitCtx.beginPath();
+                orbitCtx.arc(originX, originY, r * scale, 0, Math.PI * 2);
+                orbitCtx.stroke();
+            });
+
+            // Orbiting bodies
+            const T1 = orbitalPeriod(r1, M);
+            const T2 = orbitalPeriod(r2, M);
+            const theta1 = (2 * Math.PI * t) / T1;
+            const theta2 = (2 * Math.PI * t) / T2;
+
+            orbitCtx.fillStyle = 'blue';
+            orbitCtx.beginPath();
+            orbitCtx.arc(originX + r1 * scale * Math.cos(theta1), originY + r1 * scale * Math.sin(theta1), 5, 0, Math.PI * 2);
+            orbitCtx.fill();
+
+            orbitCtx.fillStyle = 'red';
+            orbitCtx.beginPath();
+            orbitCtx.arc(originX + r2 * scale * Math.cos(theta2), originY + r2 * scale * Math.sin(theta2), 5, 0, Math.PI * 2);
+            orbitCtx.fill();
+        }
+
+        // Chart setup for T² vs r³
+        const keplerChart = new Chart(chartCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'T² vs r³',
+                        data: [],
+                        backgroundColor: 'rgba(0, 0, 255, 0.5)',
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Orbit 1',
+                        data: [],
+                        backgroundColor: 'blue',
+                        pointRadius: 8
+                    },
+                    {
+                        label: 'Orbit 2',
+                        data: [],
+                        backgroundColor: 'red',
+                        pointRadius: 8
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: { type: 'logarithmic', title: { display: true, text: 'r³ (m³)' } },
+                    y: { type: 'logarithmic', title: { display: true, text: 'T² (days²)' } }
+                },
+                plugins: { title: { display: true, text: 'Kepler\'s Third Law: T² vs r³' } }
+            }
+        });
+
+        // Update chart
+        function updateChart() {
+            const r_values = Array.from({ length: 50 }, (_, i) => 1e8 * Math.pow(10, i * 0.1));
+            const T_values = r_values.map(r => orbitalPeriod(r, M) / (24 * 3600)); // Convert to days
+            const data = r_values.map((r, i) => ({ x: r**3, y: T_values[i]**2 }));
+
+            const T1 = orbitalPeriod(r1, M) / (24 * 3600);
+            const T2 = orbitalPeriod(r2, M) / (24 * 3600);
+
+            keplerChart.data.datasets[0].data = data;
+            keplerChart.data.datasets[1].data = [{ x: r1**3, y: T1**2 }];
+            keplerChart.data.datasets[2].data = [{ x: r2**3, y: T2**2 }];
+            keplerChart.update();
+        }
+
+        // Animation loop
+        function animate() {
+            t += 0.1; // Time step in seconds
+            drawOrbits();
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        // Start simulation
+        function startSimulation() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            M = parseFloat(document.getElementById('mass').value) * 1e30;
+            r1 = parseFloat(document.getElementById('radius1').value) * 1e8;
+            r2 = parseFloat(document.getElementById('radius2').value) * 1e8;
+
+            if (isNaN(M) || M <= 0 || isNaN(r1) || r1 <= 0 || isNaN(r2) || r2 <= 0) {
+                alert("Please enter valid values: M > 0, r1 > 0, r2 > 0");
+                return;
+            }
+
+            t = 0;
+            drawOrbits();
+            updateChart();
+            animate();
+        }
+
+        // Stop simulation
+        function stopSimulation() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+
+        // Initial draw
+        startSimulation();
+    </script>
+</body>
+</html>
