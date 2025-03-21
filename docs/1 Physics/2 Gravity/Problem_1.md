@@ -3,7 +3,7 @@
 [Simulation](Simulation_orbital.HTML)
 ## Orbital Period and Orbital Radius: Exploring Kepler's Third Law
 
-Kepler's Third Law is a fundamental principle in celestial mechanics that links the square of a body’s orbital period ($T^2$) to the cube of its orbital radius ($r^3$). This relationship offers profound insights into gravitational interactions and underpins our understanding of orbits, from satellites to exoplanets. Here, we derive this law for circular orbits, explore its implications, analyze real-world examples, and simulate it computationally.
+Kepler's Third Law is a fundamental principle in celestial mechanics that links the square of a body’s orbital period ($T^2$) to the cube of its orbital radius ($r^3$). This relationship provides valuable insights into gravitational interactions and forms the basis of our understanding of orbits, including satellites and exoplanets. In this section, we derive this law for circular orbits, examine its implications, analyze real-world examples, and simulate it using computational methods.
 
 ## 1. Theoretical Derivation
 
@@ -166,4 +166,4 @@ $$
 This holds for planets, comets, and binary stars, with $a$ as the average distance. The simulation could be extended by parameterizing elliptical paths.
 
 ## Conclusion
-Kepler’s Third Law elegantly ties orbital period to radius, validated by both theory and simulation. Its applications span from lunar orbits to exoplanet discovery, with extensions to elliptical orbits broadening its scope.
+Kepler’s Third Law elegantly connects the orbital period to the radius, supported by both theory and simulation. Its applications range from lunar orbits to exoplanet discovery, with extensions to elliptical orbits expanding its scope.  
