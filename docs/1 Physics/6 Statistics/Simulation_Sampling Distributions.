@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central Limit Theorem Simulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        canvas { margin: 20px; }
+        h2 { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Central Limit Theorem Simulation</h1>
+    <h2>Population Distribution (Exponential)</h2>
+    <canvas id="populationChart" width="600" height="300"></canvas>
+    <h2>Sampling Distribution of Sample Means</h2>
+    <canvas id="samplingChart" width="600" height="300"></canvas>
+
+    <script>
+        // Parameters
+        const populationSize = 10000;
+        const sampleSize = 30;
+        const maxSamples = 1000;
+        const bins = 50;
+        const animationInterval = 100; // ms
+
+        // Generate exponential population
+        function exponentialRandom(lambda) {
+            return -Math.log(1 - Math.random()) / lambda;
+        }
+
+        const population = Array.from({ length: populationSize }, () => exponentialRandom(0.5));
+        const popMean = population.reduce((sum, x) => sum + x, 0) / populationSize;
+        const popStd = Math.sqrt(population.reduce((sum, x) => sum + (x - popMean) ** 2, 0) / populationSize);
+
+        // Histogram function
+        function getHistogram(data, min, max, bins) {
+            const binWidth = (max - min) / bins;
+            const histogram = Array(bins).fill(0);
+            data.forEach(value => {
+                if (value >= min && value <= max) {
+                    const bin = Math.min(bins - 1, Math.floor((value - min) / binWidth));
+                    histogram[bin]++;
+                }
+            });
+            return histogram.map(count => count / (data.length * binWidth));
+        }
+
+        // Population chart (static)
+        const popMin = Math.min(...population);
+        const popMax = Math.max(...population);
+        const popHistogram = getHistogram(population, popMin, popMax, bins);
+        const popLabels = Array.from({ length: bins }, (_, i) => (popMin + (i + 0.5) * (popMax - popMin) / bins).toFixed(2));
+
+        const popCtx = document.getElementById('populationChart').getContext('2d');
+        new Chart(popCtx, {
+            type: 'bar',
+            data: {
+                labels: popLabels,
+                datasets: [{
+                    label: 'Population',
+                    data: popHistogram,
+                    backgroundColor: 'rgba(135, 206, 235, 0.7)',
+                    borderColor: 'rgba(135, 206, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Value' } },
+                    y: { title: { display: true, text: 'Density' }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Sampling distribution chart (animated)
+        const samplingCtx = document.getElementById('samplingChart').getContext('2d');
+        let sampleMeans = [];
+        const samplingMin = popMean - 3 * popStd / Math.sqrt(sampleSize);
+        const samplingMax = popMean + 3 * popStd / Math.sqrt(sampleSize);
+        const samplingLabels = Array.from({ length: bins }, (_, i) => (samplingMin + (i + 0.5) * (samplingMax - samplingMin) / bins).toFixed(2));
+
+        const samplingChart = new Chart(samplingCtx, {
+            type: 'bar',
+            data: {
+                labels: samplingLabels,
+                datasets: [{
+                    label: 'Sample Means',
+                    data: Array(bins).fill(0),
+                    backgroundColor: 'rgba(255, 165, 0, 0.7)',
+                    borderColor: 'rgba(255, 165, 0, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { title: { display: true, text: 'Sample Mean' } },
+                    y: { title: { display: true, text: 'Density' }, beginAtZero: true, max: 1.5 / (popStd / Math.sqrt(sampleSize)) }
+                }
+            }
+        });
+
+        // Animation
+        let sampleCount = 0;
+        function animate() {
+            if (sampleCount >= maxSamples) return;
+
+            // Draw sample and compute mean
+            const sample = Array.from({ length: sampleSize }, () => population[Math.floor(Math.random() * populationSize)]);
+            const sampleMean = sample.reduce((sum, x) => sum + x, 0) / sampleSize;
+            sampleMeans.push(sampleMean);
+
+            // Update histogram
+            const histogram = getHistogram(sampleMeans, samplingMin, samplingMax, bins);
+            samplingChart.data.datasets[0].data = histogram;
+            samplingChart.options.plugins.title = {
+                display: true,
+                text: `Sampling Distribution (n=${sampleSize}, ${sampleMeans.length} samples)`
+            };
+            samplingChart.update();
+
+            sampleCount++;
+            setTimeout(animate, animationInterval);
+        }
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
