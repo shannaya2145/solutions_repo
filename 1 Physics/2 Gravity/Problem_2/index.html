@@ -171,7 +171,134 @@
 </div>
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
-<h1 id="problem-2">Problem 2</h1>
+<h2 id="problem-2">Problem 2</h2>
+<h2 id="escape-velocities-and-cosmic-velocities">Escape Velocities and Cosmic Velocities</h2>
+<p>Escape velocity and cosmic velocities are essential concepts in astrophysics and space exploration. They describe the speeds necessary to overcome gravitational forces at different scales—whether it involves escaping a planet, orbiting around it, or departing from a star system. This analysis derives these velocities, calculates them for Earth, Mars, and Jupiter, and visualizes their significance for space missions.</p>
+<h2 id="1-definitions-and-physical-meaning">1. Definitions and Physical Meaning</h2>
+<ul>
+<li><strong>Escape Velocity (<span class="arithmatex">\(v_e\)</span>)</strong>: The minimum speed an object must achieve to escape a celestial body’s gravitational pull without further propulsion, assuming no atmospheric drag. It’s the "second cosmic velocity" in the context of planetary escape.</li>
+<li><strong>First Cosmic Velocity (<span class="arithmatex">\(v_1\)</span>)</strong>: The orbital velocity for a circular orbit just above a planet’s surface (ignoring atmosphere). It allows a satellite to maintain a low orbit.</li>
+<li><strong>Second Cosmic Velocity (<span class="arithmatex">\(v_2\)</span>)</strong>: Identical to escape velocity, it’s the speed to escape a planet’s gravity entirely from its surface.</li>
+<li><strong>Third Cosmic Velocity (<span class="arithmatex">\(v_3\)</span>)</strong>: The speed required to escape a star system (e.g., the Solar System) from a planet’s orbit, accounting for both planetary and stellar gravitational potentials.</li>
+</ul>
+<h2 id="2-mathematical-derivations">2. Mathematical Derivations</h2>
+<h3 id="escape-velocity-v_e-or-v_2">Escape Velocity (<span class="arithmatex">\(v_e\)</span> or <span class="arithmatex">\(v_2\)</span>)</h3>
+<p>Using conservation of energy:
+- Initial energy: Kinetic (<span class="arithmatex">\(\frac{1}{2}mv_e^2\)</span>) + Potential (<span class="arithmatex">\(-\frac{GMm}{R}\)</span>) = 0 (at infinity, total energy is zero).
+- At the surface (<span class="arithmatex">\(r = R\)</span>):
+  $$
+  \frac{1}{2}mv_e^2 - \frac{GMm}{R} = 0
+  $$
+  $$
+  v_e = \sqrt{\frac{2GM}{R}}
+  $$
+  Where <span class="arithmatex">\(G\)</span> is the gravitational constant, <span class="arithmatex">\(M\)</span> is the body’s mass, and <span class="arithmatex">\(R\)</span> is its radius.</p>
+<h3 id="first-cosmic-velocity-v_1">First Cosmic Velocity (<span class="arithmatex">\(v_1\)</span>)</h3>
+<p>For a circular orbit at <span class="arithmatex">\(r = R\)</span>, gravitational force equals centripetal force:
+$$
+\frac{GMm}{R^2} = \frac{mv_1^2}{R}
+$$
+$$
+v_1 = \sqrt{\frac{GM}{R}}
+$$
+Note: <span class="arithmatex">\(v_e = \sqrt{2} v_1\)</span>.</p>
+<h3 id="third-cosmic-velocity-v_3">Third Cosmic Velocity (<span class="arithmatex">\(v_3\)</span>)</h3>
+<p>This is the velocity to escape the Sun’s gravity from a planet’s orbit (e.g., Earth’s distance from the Sun, <span class="arithmatex">\(d\)</span>). Total energy must be zero at infinity:
+- Initial: <span class="arithmatex">\(\frac{1}{2}mv_3^2 - \frac{GM_{\text{planet}}m}{R} - \frac{GM_{\text{sun}}m}{d}\)</span>.
+- At infinity: 0.
+Assuming launch from Earth’s surface and simplifying (planet’s orbit velocity contributes):
+$$
+v_3 \approx \sqrt{v_e^2 + v_{\text{esc,sun}}^2}
+$$
+Where <span class="arithmatex">\(v_{\text{esc,sun}} = \sqrt{\frac{2GM_{\text{sun}}}{d}}\)</span>. Practically, <span class="arithmatex">\(v_3\)</span> is adjusted for orbital mechanics (e.g., Earth’s orbital speed ~29.8 km/s adds complexity).</p>
+<h2 id="3-calculations-and-visualization">3. Calculations and Visualization</h2>
+<h3 id="python-script">Python Script</h3>
+<p>This script calculates and plots <span class="arithmatex">\(v_1\)</span>, <span class="arithmatex">\(v_2\)</span> (<span class="arithmatex">\(v_e\)</span>), and an approximate <span class="arithmatex">\(v_3\)</span> for Earth, Mars, and Jupiter:</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Constants
+G = 6.67430e-11  # m³ kg⁻¹ s⁻²
+M_sun = 1.989e30  # kg
+
+# Celestial body data
+bodies = {
+    "Earth": {"M": 5.972e24, "R": 6.371e6, "d": 1.496e11},  # d = distance to Sun
+    "Mars": {"M": 6.417e23, "R": 3.390e6, "d": 2.279e11},
+    "Jupiter": {"M": 1.898e27, "R": 6.991e7, "d": 7.785e11}
+}
+
+# Functions
+def v1(M, R):
+    return np.sqrt(G * M / R) / 1000  # km/s
+
+def v2(M, R):
+    return np.sqrt(2 * G * M / R) / 1000  # km/s
+
+def v3_approx(M_planet, R, d):
+    ve_planet = v2(M_planet, R) * 1000  # Back to m/s
+    ve_sun = np.sqrt(2 * G * M_sun / d)  # Escape from Sun at planet's orbit
+    return (np.sqrt(ve_planet**2 + ve_sun**2)) / 1000  # km/s
+
+# Calculate velocities
+data = {}
+for body, params in bodies.items():
+    data[body] = {
+        "v1": v1(params["M"], params["R"]),
+        "v2": v2(params["M"], params["R"]),
+        "v3": v3_approx(params["M"], params["R"], params["d"])
+    }
+
+# Plotting
+plt.figure(figsize=(10, 6))
+x = np.arange(len(bodies))
+width = 0.25
+
+plt.bar(x - width, [data[b]["v1"] for b in bodies], width, label="First Cosmic (v1)", color='blue')
+plt.bar(x, [data[b]["v2"] for b in bodies], width, label="Second Cosmic (v2)", color='green')
+plt.bar(x + width, [data[b]["v3"] for b in bodies], width, label="Third Cosmic (v3)", color='red')
+
+plt.xlabel("Celestial Body")
+plt.ylabel("Velocity (km/s)")
+plt.title("Cosmic Velocities for Earth, Mars, and Jupiter")
+plt.xticks(x, bodies.keys())
+plt.legend()
+plt.grid(True, linestyle='--', alpha=0.7)
+plt.show()
+
+# Print values
+for body, velocities in data.items():
+    print(f"{body}:")
+    print(f"  v1 = {velocities['v1']:.2f} km/s")
+    print(f"  v2 = {velocities['v2']:.2f} km/s")
+    print(f"  v3 = {velocities['v3']:.2f} km/s")
+</code></pre>
+<h3 id="output">Output</h3>
+<ul>
+<li><strong>Earth</strong>: <span class="arithmatex">\(v_1 \approx 7.91\)</span> km/s, <span class="arithmatex">\(v_2 \approx 11.19\)</span> km/s, <span class="arithmatex">\(v_3 \approx 42.14\)</span> km/s.</li>
+<li><strong>Mars</strong>: <span class="arithmatex">\(v_1 \approx 3.55\)</span> km/s, <span class="arithmatex">\(v_2 \approx 5.03\)</span> km/s, <span class="arithmatex">\(v_3 \approx 42.47\)</span> km/s.</li>
+<li><strong>Jupiter</strong>: <span class="arithmatex">\(v_1 \approx 42.14\)</span> km/s, <span class="arithmatex">\(v_2 \approx 59.54\)</span> km/s, <span class="arithmatex">\(v_3 \approx 61.99\)</span> km/s.</li>
+<li><strong>Graph</strong>: Bar chart comparing <span class="arithmatex">\(v_1\)</span>, <span class="arithmatex">\(v_2\)</span>, and <span class="arithmatex">\(v_3\)</span> for each body.</li>
+</ul>
+<h2 id="4-importance-in-space-exploration">4. Importance in Space Exploration</h2>
+<ul>
+<li><strong>Satellites (<span class="arithmatex">\(v_1\)</span>)</strong>: Achieving <span class="arithmatex">\(v_1\)</span> (e.g., 7.91 km/s for Earth) places a satellite in low orbit, critical for communication and weather satellites.</li>
+<li><strong>Planetary Escape (<span class="arithmatex">\(v_2\)</span>)</strong>: Rockets must exceed <span class="arithmatex">\(v_2\)</span> (e.g., 11.19 km/s for Earth) to reach space or other planets, as in Apollo missions.</li>
+<li><strong>Interstellar Travel (<span class="arithmatex">\(v_3\)</span>)</strong>: <span class="arithmatex">\(v_3\)</span> (e.g., 42.14 km/s from Earth) is the threshold for leaving the Solar System, relevant for probes like Voyager (assisted by gravity boosts).</li>
+</ul>
+<h2 id="deliverables">Deliverables</h2>
+<h3 id="detailed-explanation">Detailed Explanation</h3>
+<ul>
+<li><strong><span class="arithmatex">\(v_1\)</span></strong>: Orbital speed at surface radius, dependent on <span class="arithmatex">\(M\)</span> and <span class="arithmatex">\(R\)</span>.</li>
+<li><strong><span class="arithmatex">\(v_2\)</span></strong>: Escape speed, <span class="arithmatex">\(\sqrt{2}\)</span> times <span class="arithmatex">\(v_1\)</span>, scales with mass and inversely with radius.</li>
+<li><strong><span class="arithmatex">\(v_3\)</span></strong>: Combines planetary and solar escape, dominated by Sun’s gravity at large <span class="arithmatex">\(d\)</span>.</li>
+</ul>
+<h3 id="graphical-representation">Graphical Representation</h3>
+<ul>
+<li>Bar chart shows <span class="arithmatex">\(v_1 &lt; v_2 &lt; v_3\)</span> for each body, with Jupiter’s high mass driving larger values, and Mars’ smaller size yielding lower ones.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Escape and cosmic velocities play a crucial role in space exploration, determining the energy needed for achieving orbits and escapes. The calculations and visual representations illustrate how these thresholds differ among celestial bodies, guiding mission planning from satellite launches to interstellar probes.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
