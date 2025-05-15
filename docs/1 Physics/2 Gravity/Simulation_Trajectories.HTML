@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payload Trajectories Near Earth</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+        }
+        p {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        #canvas-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .legend {
+            max-width: 800px;
+            margin: 10px auto;
+            font-size: 14px;
+        }
+        .legend span {
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Payload Trajectories Near Earth</h1>
+    <p>
+        This animation shows the motion of a payload released from a rocket at 400 km altitude above Earth. Three trajectories are simulated:
+        <ul>
+            <li><b>Suborbital (blue)</b>: Velocity is 80% of circular orbit velocity, leading to reentry.</li>
+            <li><b>Circular Orbit (green)</b>: Velocity matches circular orbit requirements, maintaining a stable orbit.</li>
+            <li><b>Escape (red)</b>: Velocity is 120% of escape velocity, resulting in a hyperbolic escape from Earth.</li>
+        </ul>
+        Earth is shown as a black circle, and the payloads are animated as moving points with trails showing their paths. The simulation uses Newton's law of gravitation and a Runge-Kutta 4 integrator to compute the motion.
+    </p>
+    <div id="canvas-container"></div>
+    <div class="legend">
+        <span style="color: blue;">■ Suborbital</span>
+        <span style="color: green;">■ Circular Orbit</span>
+        <span style="color: red;">■ Escape</span>
+    </div>
+
+    <script>
+        // Log to confirm script is running
+        console.log("Trajectory animation script started.");
+
+        // Constants (in SI units, scaled for simulation)
+        const G = 6.67430e-11; // Gravitational constant (m^3 kg^-1 s^-2)
+        const M = 5.972e24; // Earth's mass (kg)
+        const mu = G * M; // Gravitational parameter (m^3 s^-2)
+        const R_e = 6371e3; // Earth's radius (m)
+        const h = 400e3; // Altitude (m)
+        const r0 = R_e + h; // Initial radial distance (m)
+        const scale = 50 / R_e; // Scale factor for canvas (pixels per meter)
+        const dt = 10; // Time step for integration (s)
+        const simTime = 2 * 3600; // 2 hours simulation time (s)
+        const steps = Math.floor(simTime / dt);
+
+        // Initial velocities
+        const v_circ = Math.sqrt(mu / r0); // Circular orbit velocity (m/s)
+        const v_esc = Math.sqrt(2 * mu / r0); // Escape velocity (m/s)
+        const cases = [
+            { name: 'Suborbital', v0: 0.8 * v_circ, color: [0, 0, 255], path: [] },
+            { name: 'Circular Orbit', v0: v_circ, color: [0, 255, 0], path: [] },
+            { name: 'Escape', v0: 1.2 * v_esc, color: [255, 0, 0], path: [] }
+        ];
+
+        // Equations of motion
+        function equations(state) {
+            let [x, y, vx, vy] = state;
+            let r = Math.sqrt(x * x + y * y);
+            if (r === 0) return [vx, vy, 0, 0]; // Prevent division by zero
+            let ax = -mu * x / (r * r * r);
+            let ay = -mu * y / (r * r * r);
+            return [vx, vy, ax, ay];
+        }
+
+        // Runge-Kutta 4 integrator
+        function rk4(state, dt) {
+            let k1 = equations(state);
+            let k2 = equations(state.map((s, i) => s + 0.5 * dt * k1[i]));
+            let k3 = equations(state.map((s, i) => s + 0.5 * dt * k2[i]));
+            let k4 = equations(state.map((s, i) => s + dt * k3[i]));
+            return state.map((s, i) => s + (dt / 6) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+        }
+
+        // Precompute trajectories
+        function computeTrajectories() {
+            cases.forEach(c => {
+                let state = [r0, 0, 0, c.v0]; // Initial state: [x, y, vx, vy]
+                c.path = [[state[0], state[1]]]; // Store initial position
+                for (let i = 0; i < steps; i++) {
+                    state = rk4(state, dt);
+                    // Check for valid state to prevent NaN
+                    if (isNaN(state[0]) || isNaN(state[1])) {
+                        console.error(`Invalid state for ${c.name} at step ${i}`);
+                        break;
+                    }
+                    c.path.push([state[0], state[1]]);
+                }
+                console.log(`${c.name} trajectory computed with ${c.path.length} points.`);
+            });
+        }
+
+        // p5.js setup
+        function setup() {
+            let canvas = createCanvas(600, 600);
+            canvas.parent('canvas-container'); // Attach canvas to div
+            computeTrajectories();
+            frameRate(30);
+            console.log("p5.js setup complete.");
+        }
+
+        // p5.js draw
+        let t = 0;
+        function draw() {
+            background(0);
+            // Translate to center canvas
+            translate(width / 2, height / 2);
+            // Flip y-axis for natural orientation
+            scale(1, -1);
+
+            // Draw Earth
+            fill(0);
+            stroke(255);
+            ellipse(0, 0, 2 * R_e * scale, 2 * R_e * scale);
+
+            // Draw trajectories and payloads
+            cases.forEach(c => {
+                if (!c.path || c.path.length === 0) return; // Skip if path is invalid
+                // Draw trail
+                stroke(c.color);
+                noFill();
+                beginShape();
+                for (let i = 0; i < Math.min(t, c.path.length); i++) {
+                    let x = c.path[i][0] * scale;
+                    let y = c.path[i][1] * scale;
+                    vertex(x, y);
+                }
+                endShape();
+
+                // Draw payload
+                if (t < c.path.length) {
+                    fill(c.color);
+                    noStroke();
+                    let x = c.path[t][0] * scale;
+                    let y = c.path[t][1] * scale;
+                    ellipse(x, y, 5, 5);
+                }
+            });
+
+            // Update time step
+            t += 5; // Speed up animation by skipping steps
+            if (t >= steps) t = 0; // Loop animation
+        }
+    </script>
+</body>
+</html>
