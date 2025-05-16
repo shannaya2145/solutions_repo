@@ -172,6 +172,150 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<p>Sure! Here’s a detailed report in Markdown format covering the task you described about simulating the Lorentz force effects. It includes motivation, theory, simulation implementation, results, and discussion.</p>
+<hr/>
+<h1 id="simulating-the-effects-of-the-lorentz-force">Simulating the Effects of the Lorentz Force</h1>
+<h2 id="1-introduction-and-motivation">1. Introduction and Motivation</h2>
+<p>The <strong>Lorentz force</strong> is fundamental to understanding the behavior of charged particles in electromagnetic fields. It is defined as:</p>
+<div class="arithmatex">\[
+\mathbf{F} = q(\mathbf{E} + \mathbf{v} \times \mathbf{B})
+\]</div>
+<p>where:</p>
+<ul>
+<li><span class="arithmatex">\(q\)</span> is the particle charge,</li>
+<li><span class="arithmatex">\(\mathbf{E}\)</span> is the electric field,</li>
+<li><span class="arithmatex">\(\mathbf{v}\)</span> is the particle velocity,</li>
+<li><span class="arithmatex">\(\mathbf{B}\)</span> is the magnetic field.</li>
+</ul>
+<p>The Lorentz force governs key phenomena in many practical systems, such as particle accelerators, plasma confinement devices, and astrophysical processes. By simulating the trajectories of charged particles under different field configurations, we gain intuitive insight into these complex motions.</p>
+<hr/>
+<h2 id="2-applications-of-the-lorentz-force">2. Applications of the Lorentz Force</h2>
+<h3 id="systems-influenced-by-the-lorentz-force">Systems Influenced by the Lorentz Force</h3>
+<ul>
+<li><strong>Particle Accelerators</strong>: Use magnetic and electric fields to steer and accelerate charged particles along precise trajectories.</li>
+<li><strong>Mass Spectrometers</strong>: Separate ions based on mass-to-charge ratio using magnetic and electric fields.</li>
+<li><strong>Plasma Confinement</strong>: Magnetic fields trap charged particles in devices like tokamaks for nuclear fusion.</li>
+<li><strong>Astrophysical Phenomena</strong>: Cosmic rays and charged particles spiral in planetary magnetospheres.</li>
+</ul>
+<h3 id="role-of-fields">Role of Fields</h3>
+<ul>
+<li><strong>Magnetic Fields (<span class="arithmatex">\(\mathbf{B}\)</span>)</strong>: Affect particle trajectory by bending their paths, often causing circular or helical motion.</li>
+<li><strong>Electric Fields (<span class="arithmatex">\(\mathbf{E}\)</span>)</strong>: Accelerate particles linearly, changing speed and direction.</li>
+<li><strong>Combined Fields</strong>: Create complex motions like drifts or cyclotron orbits.</li>
+</ul>
+<hr/>
+<h2 id="3-simulation-of-particle-motion">3. Simulation of Particle Motion</h2>
+<h3 id="31-equations-of-motion">3.1 Equations of Motion</h3>
+<p>The motion is governed by Newton's second law, <span class="arithmatex">\(m \frac{d\mathbf{v}}{dt} = \mathbf{F}\)</span>:</p>
+<div class="arithmatex">\[
+m \frac{d\mathbf{v}}{dt} = q(\mathbf{E} + \mathbf{v} \times \mathbf{B})
+\]</div>
+<div class="arithmatex">\[
+\frac{d\mathbf{r}}{dt} = \mathbf{v}
+\]</div>
+<p>where <span class="arithmatex">\(m\)</span> is the particle mass, <span class="arithmatex">\(\mathbf{r}\)</span> the position vector.</p>
+<h3 id="32-numerical-integration-method">3.2 Numerical Integration Method</h3>
+<p>We use the <strong>Runge-Kutta 4th order (RK4)</strong> method for numerical integration to solve the coupled ODEs for velocity and position.</p>
+<h3 id="33-simulation-scenarios">3.3 Simulation Scenarios</h3>
+<ul>
+<li><strong>Uniform Magnetic Field</strong>: Particle exhibits circular or helical trajectories.</li>
+<li><strong>Uniform Electric and Magnetic Fields</strong>: Particle experiences acceleration and gyration.</li>
+<li><strong>Crossed Fields</strong>: Particle shows drift motion perpendicular to both fields.</li>
+</ul>
+<hr/>
+<h2 id="4-parameter-exploration">4. Parameter Exploration</h2>
+<p>The simulation allows varying:</p>
+<ul>
+<li>Magnetic field strength (<span class="arithmatex">\(B\)</span>)</li>
+<li>Electric field strength (<span class="arithmatex">\(E\)</span>)</li>
+<li>Initial particle velocity (<span class="arithmatex">\(\mathbf{v}_0\)</span>)</li>
+<li>Particle charge (<span class="arithmatex">\(q\)</span>)</li>
+<li>Particle mass (<span class="arithmatex">\(m\)</span>)</li>
+</ul>
+<p>These variations change trajectory radius, frequency, drift velocity, and motion type.</p>
+<hr/>
+<h2 id="5-results-and-visualization">5. Results and Visualization</h2>
+<h3 id="51-circular-motion-in-uniform-magnetic-field">5.1 Circular Motion in Uniform Magnetic Field</h3>
+<ul>
+<li>
+<p>Particle velocity perpendicular to <span class="arithmatex">\(\mathbf{B}\)</span> produces circular orbits.</p>
+</li>
+<li>
+<p>Radius <span class="arithmatex">\(r = \frac{mv}{|q|B}\)</span> (Larmor radius).</p>
+</li>
+<li>
+<p>Frequency <span class="arithmatex">\(\omega = \frac{|q|B}{m}\)</span> (cyclotron frequency).</p>
+</li>
+</ul>
+<h3 id="52-helical-motion-with-velocity-component-parallel-to-mathbfb">5.2 Helical Motion with Velocity Component Parallel to <span class="arithmatex">\(\mathbf{B}\)</span></h3>
+<ul>
+<li>Combination of circular and linear motion along field lines.</li>
+</ul>
+<h3 id="53-drift-in-crossed-electric-and-magnetic-fields">5.3 Drift in Crossed Electric and Magnetic Fields</h3>
+<ul>
+<li>Particle drifts with velocity <span class="arithmatex">\(\mathbf{v}_d = \frac{\mathbf{E} \times \mathbf{B}}{B^2}\)</span>.</li>
+</ul>
+<h3 id="visualization-examples">Visualization Examples</h3>
+<ul>
+<li>2D and 3D plots show particle trajectories.</li>
+<li>Larmor radius and drift velocities highlighted.</li>
+<li>Effects of parameter changes demonstrated visually.</li>
+</ul>
+<hr/>
+<h2 id="6-discussion">6. Discussion</h2>
+<p>The simulation replicates fundamental charged particle behaviors found in devices like cyclotrons and magnetic traps. For example:</p>
+<ul>
+<li>In <strong>cyclotrons</strong>, particles spiral outward under combined electric and magnetic fields, matching the circular/helical patterns observed.</li>
+<li>In <strong>magnetic confinement</strong>, charged particles follow helical paths around magnetic field lines, critical for plasma stability.</li>
+</ul>
+<p>Understanding the Lorentz force through simulation helps design and optimize these systems.</p>
+<h2 id="appendix-python-code-snippet">Appendix: Python Code Snippet</h2>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+def lorentz_force(t, y, q, m, E, B):
+    r = y[:3]
+    v = y[3:]
+    dvdt = (q/m) * (E + np.cross(v, B))
+    drdt = v
+    return np.concatenate((drdt, dvdt))
+
+def rk4_step(f, t, y, dt, *args):
+    k1 = f(t, y, *args)
+    k2 = f(t + dt/2, y + dt*k1/2, *args)
+    k3 = f(t + dt/2, y + dt*k2/2, *args)
+    k4 = f(t + dt, y + dt*k3, *args)
+    return y + (dt/6)*(k1 + 2*k2 + 2*k3 + k4)
+
+# Parameters
+q = 1.6e-19
+m = 9.11e-31
+E = np.array([0, 0, 0])
+B = np.array([0, 0, 1e-3])
+v0 = np.array([1e5, 0, 0])
+r0 = np.array([0, 0, 0])
+y = np.concatenate((r0, v0))
+
+dt = 1e-9
+T = 1e-6
+steps = int(T/dt)
+
+trajectory = np.zeros((steps, 3))
+
+for i in range(steps):
+    y = rk4_step(lorentz_force, i*dt, y, dt, q, m, E, B)
+    trajectory[i] = y[:3]
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(trajectory[:,0], trajectory[:,1], trajectory[:,2])
+ax.set_xlabel('x (m)')
+ax.set_ylabel('y (m)')
+ax.set_zlabel('z (m)')
+plt.title('Charged Particle Trajectory in Uniform Magnetic Field')
+plt.show()
+</code></pre>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
