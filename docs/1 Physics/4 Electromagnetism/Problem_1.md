@@ -1,8 +1,6 @@
 # Problem 1
 
-Sure! Here’s a detailed report in Markdown format covering the task you described about simulating the Lorentz force effects. It includes motivation, theory, simulation implementation, results, and discussion.
-
----
+[Simulation](Simulation_electro.HTML)
 
 # Simulating the Effects of the Lorentz Force
 
