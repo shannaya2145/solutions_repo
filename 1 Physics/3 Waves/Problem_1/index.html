@@ -66,6 +66,18 @@
 <ul class="current">
 <li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
 <ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#1-theoretical-background">1. Theoretical Background</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#2-source-configuration">2. Source Configuration</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#3-simulation-method">3. Simulation Method</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#4-results-and-discussion">4. Results and Discussion</a>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#5-conclusion">5. Conclusion</a>
+</li>
 </ul>
 </li>
 </ul>
@@ -172,6 +184,103 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
+<h3 id="introduction"><strong>Introduction</strong></h3>
+<p>This report presents an investigation into the interference patterns formed by circular water waves emitted from multiple coherent point sources positioned at the vertices of a regular polygon. The objective is to analyze and visualize the resulting wave displacement patterns on the surface due to the principle of superposition.</p>
+<p>A square configuration was selected for this analysis, and all sources were assumed to emit waves with identical amplitude, wavelength, frequency, and initial phase. The resulting displacement field was computed and visualized using a Python simulation.</p>
+<hr/>
+<h3 id="1-theoretical-background"><strong>1. Theoretical Background</strong></h3>
+<p>The displacement of the water surface at a given point <span class="arithmatex">\((x, y)\)</span> and time <span class="arithmatex">\(t\)</span> from a single circular wave source located at <span class="arithmatex">\((x_i, y_i)\)</span> is given by:</p>
+<div class="arithmatex">\[
+\eta_i(x, y, t) = A \cos(k r_i - \omega t)
+\]</div>
+<p>where:</p>
+<ul>
+<li>
+<p><span class="arithmatex">\(A\)</span> is the amplitude,</p>
+</li>
+<li>
+<p><span class="arithmatex">\(k = \frac{2\pi}{\lambda}\)</span> is the wave number,</p>
+</li>
+<li>
+<p><span class="arithmatex">\(\omega = 2\pi f\)</span> is the angular frequency,</p>
+</li>
+<li>
+<p><span class="arithmatex">\(r_i = \sqrt{(x - x_i)^2 + (y - y_i)^2}\)</span> </p>
+</li>
+</ul>
+<p>is the radial distance from the source to the point,</p>
+<ul>
+<li>and all sources are coherent (initial phase <span class="arithmatex">\(\phi = 0\)</span>).</li>
+</ul>
+<p>The total displacement at a point due to <span class="arithmatex">\(N\)</span> sources is the sum of the individual displacements:</p>
+<div class="arithmatex">\[
+\eta(x, y, t) = \sum_{i=1}^{N} \eta_i(x, y, t)
+\]</div>
+<hr/>
+<h3 id="2-source-configuration"><strong>2. Source Configuration</strong></h3>
+<p>A regular square was chosen as the polygonal configuration. The square is centered at the origin and has a side length of <span class="arithmatex">\(2a\)</span>. The coordinates of the four sources are:</p>
+<ul>
+<li><span class="arithmatex">\(S_1 = (-a, -a)\)</span></li>
+<li><span class="arithmatex">\(S_2 = (-a, a)\)</span></li>
+<li><span class="arithmatex">\(S_3 = (a, a)\)</span></li>
+<li><span class="arithmatex">\(S_4 = (a, -a)\)</span></li>
+</ul>
+<p>For simulation purposes, <span class="arithmatex">\(a = 1.0\)</span> was used.</p>
+<hr/>
+<h3 id="3-simulation-method"><strong>3. Simulation Method</strong></h3>
+<p>A 2D spatial grid was created to represent the water surface. For each point on the grid, the total displacement <span class="arithmatex">\(\eta(x, y, t)\)</span> was calculated by summing the contributions from all four sources. A snapshot at a fixed time <span class="arithmatex">\(t = 0\)</span> was used to generate a contour plot of the displacement field.</p>
+<p>The Python code used for the simulation is shown below:</p>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+A = 1.0           # Amplitude
+λ = 1.0           # Wavelength
+f = 1.0           # Frequency
+k = 2 * np.pi / λ # Wavenumber
+ω = 2 * np.pi * f # Angular frequency
+a = 1.0           # Half-side of square
+
+# Time snapshot
+t = 0
+
+# Grid setup
+x = np.linspace(-3, 3, 500)
+y = np.linspace(-3, 3, 500)
+X, Y = np.meshgrid(x, y)
+
+# Source positions
+sources = [(-a, -a), (-a, a), (a, a), (a, -a)]
+
+# Superposition of waves
+eta = np.zeros_like(X)
+for (x0, y0) in sources:
+    R = np.sqrt((X - x0)**2 + (Y - y0)**2)
+    eta += A * np.cos(k * R - ω * t)
+
+# Plotting
+plt.figure(figsize=(8, 6))
+plt.contourf(X, Y, eta, levels=100, cmap='viridis')
+plt.colorbar(label='Displacement η(x, y, t)')
+plt.title('Interference Pattern from 4 Wave Sources (Square Configuration)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.axis('equal')
+plt.show()
+</code></pre>
+<hr/>
+<h3 id="4-results-and-discussion"><strong>4. Results and Discussion</strong></h3>
+<p>The resulting interference pattern exhibits symmetrical regions of constructive and destructive interference due to the coherent interaction of the waves. Key observations include:</p>
+<ul>
+<li><strong>Constructive interference</strong> occurs at points where wavefronts from the sources arrive in phase, leading to higher amplitude regions (shown as bright bands or peaks).</li>
+<li><strong>Destructive interference</strong> arises where the waves arrive out of phase, resulting in cancellation (dark nodes or lines).</li>
+<li>The overall pattern demonstrates <strong>square symmetry</strong>, reflecting the geometry of the source arrangement.</li>
+</ul>
+<p>The simulation effectively illustrates the spatial periodicity and complexity of interference patterns created by multiple circular wave sources.</p>
+<hr/>
+<h3 id="5-conclusion"><strong>5. Conclusion</strong></h3>
+<p>This study successfully demonstrates the use of mathematical modeling and numerical simulation to analyze the interference of circular waves from sources arranged in a regular polygon. The square configuration produced predictable, symmetric patterns, confirming theoretical expectations based on wave superposition.</p>
+<p>The methodology can be extended to other polygonal arrangements (e.g., triangle, pentagon) or adapted to include phase shifts, damping, and boundary effects for more realistic scenarios.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
