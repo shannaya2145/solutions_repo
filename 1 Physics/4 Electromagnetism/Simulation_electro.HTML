@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lorentz Force Particle Simulation</title>
+<style>
+  body { margin: 0; background: #111; color: #eee; font-family: Arial, sans-serif; }
+  #canvas { background: #222; display: block; margin: 20px auto; border: 1px solid #555; }
+  #info { width: 600px; margin: auto; text-align: center; }
+  label { display: inline-block; width: 130px; text-align: right; }
+  input { width: 80px; margin-left: 10px; }
+  #controls { margin-bottom: 15px; }
+  button { margin-left: 10px; padding: 5px 12px; }
+</style>
+</head>
+<body>
+
+<div id="info">
+  <h2>Lorentz Force Particle Simulation (Uniform Magnetic Field)</h2>
+  <div id="controls">
+    <label>Charge (q, C): <input type="number" id="charge" value="1.6e-19" step="1e-20"></label>
+    <label>Mass (m, kg): <input type="number" id="mass" value="9.11e-31" step="1e-32"></label><br><br>
+    <label>Magnetic Field (B, T): <input type="number" id="Bz" value="0.001" step="0.0001"></label>
+    <label>Initial Velocity (vx, m/s): <input type="number" id="vx" value="1e5" step="1e4"></label><br><br>
+    <button id="startBtn">Start Simulation</button>
+    <button id="resetBtn">Reset</button>
+  </div>
+</div>
+
+<canvas id="canvas" width="600" height="600"></canvas>
+
+<script>
+(() => {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Simulation parameters (will be read from inputs)
+  let q, m, Bz, vx0;
+  let dt = 1e-9;  // time step in seconds
+  let scale = 1e-4; // scaling factor for visualization (m to pixels)
+
+  let x, y, vx, vy;
+  let trajectory = [];
+
+  let animationId = null;
+  let running = false;
+
+  function lorentzForce(vx, vy) {
+    // Magnetic force: F = q v x B
+    // B = (0,0,Bz)
+    // Fx = q * vy * Bz
+    // Fy = -q * vx * Bz
+    let Fx = q * vy * Bz;
+    let Fy = -q * vx * Bz;
+    return { Fx, Fy };
+  }
+
+  function update() {
+    // Calculate force
+    const { Fx, Fy } = lorentzForce(vx, vy);
+    // Update velocities using Euler method: a = F/m
+    const ax = Fx / m;
+    const ay = Fy / m;
+
+    vx += ax * dt;
+    vy += ay * dt;
+
+    // Update positions
+    x += vx * dt;
+    y += vy * dt;
+
+    trajectory.push({ x, y });
+
+    if (trajectory.length > 500) {
+      trajectory.shift(); // keep trajectory length manageable
+    }
+  }
+
+  function draw() {
+    // Clear canvas
+    ctx.fillStyle = '#222';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw trajectory
+    ctx.beginPath();
+    for (let i = 0; i < trajectory.length; i++) {
+      const pos = trajectory[i];
+      let px = canvas.width / 2 + pos.x / scale;
+      let py = canvas.height / 2 - pos.y / scale;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.strokeStyle = '#00ffdd';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Draw particle as circle
+    let px = canvas.width / 2 + x / scale;
+    let py = canvas.height / 2 - y / scale;
+    ctx.beginPath();
+    ctx.arc(px, py, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = '#ff5555';
+    ctx.fill();
+
+    // Display info text
+    ctx.fillStyle = '#eee';
+    ctx.font = '14px monospace';
+    ctx.fillText(`Position (m): x=${x.toExponential(2)}, y=${y.toExponential(2)}`, 10, 20);
+    ctx.fillText(`Velocity (m/s): vx=${vx.toExponential(2)}, vy=${vy.toExponential(2)}`, 10, 40);
+  }
+
+  function step() {
+    update();
+    draw();
+    animationId = requestAnimationFrame(step);
+  }
+
+  function startSimulation() {
+    if (running) return;
+    // Read parameters from input fields
+    q = parseFloat(document.getElementById('charge').value);
+    m = parseFloat(document.getElementById('mass').value);
+    Bz = parseFloat(document.getElementById('Bz').value);
+    vx0 = parseFloat(document.getElementById('vx').value);
+
+    // Initialize position and velocity
+    x = 0;
+    y = 0;
+    vx = vx0;
+    vy = 0;
+    trajectory = [];
+
+    running = true;
+    animationId = requestAnimationFrame(step);
+  }
+
+  function resetSimulation() {
+    running = false;
+    if (animationId) cancelAnimationFrame(animationId);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    trajectory = [];
+    x = 0; y = 0; vx = 0; vy = 0;
+  }
+
+  document.getElementById('startBtn').addEventListener('click', startSimulation);
+  document.getElementById('resetBtn').addEventListener('click', resetSimulation);
+
+  // Initial clear
+  resetSimulation();
+})();
+</script>
+
+</body>
+</html>
