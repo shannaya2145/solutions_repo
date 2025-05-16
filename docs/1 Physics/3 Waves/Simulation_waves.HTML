@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wave Interference Animation</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      border: 2px solid #fff;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  const A = 1; // amplitude
+  const lambda = 40; // wavelength in pixels
+  const k = 2 * Math.PI / lambda; // wave number
+  const f = 0.02; // frequency
+  const omega = 2 * Math.PI * f; // angular frequency
+  const center = width / 2;
+  const a = 80; // half-side length of square
+
+  const sources = [
+    [center - a, center - a],
+    [center - a, center + a],
+    [center + a, center + a],
+    [center + a, center - a]
+  ];
+
+  let time = 0;
+
+  function draw() {
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        let eta = 0;
+
+        for (let i = 0; i < sources.length; i++) {
+          const dx = x - sources[i][0];
+          const dy = y - sources[i][1];
+          const r = Math.sqrt(dx * dx + dy * dy);
+          eta += Math.cos(k * r - omega * time);
+        }
+
+        const brightness = 127.5 + 127.5 * eta / sources.length;
+        const index = (y * width + x) * 4;
+        data[index] = brightness;     // R
+        data[index + 1] = brightness; // G
+        data[index + 2] = brightness; // B
+        data[index + 3] = 255;        // A
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    time += 1;
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
+</body>
+</html>
