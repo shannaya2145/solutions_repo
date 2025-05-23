@@ -35,6 +35,7 @@
    $$
    T = \frac{\overline{T}_{10}}{10} = \frac{24.53}{10} = 2.453 \, \text{s}
    $$
+
    $$
    \Delta T = \frac{\Delta T_{10}}{10} = \frac{0.030}{10} = 0.003 \, \text{s}
    $$
@@ -113,8 +114,6 @@
    - The uncertainty in timing ($\Delta T$) is more significant due to variability in the stopwatch measurements, likely from reaction time errors.
    - Assumptions like neglecting air resistance and assuming a point mass may lead to a slight overestimation of $g$. These factors suggest the result is reasonably accurate but could be improved with more precise timing methods (e.g., a photogate) and a controlled environment.
 
----
-
-### Final Answer
+## Conclusion
 - Measured $g = 9.84 \pm 0.02 \, \text{m/s}^2$, which is close to the standard $9.81 \, \text{m/s}^2$.
 - Main uncertainties arise from timing variability, with minor contributions from length measurement. Limitations include the small-angle approximation and neglected effects like air resistance.
