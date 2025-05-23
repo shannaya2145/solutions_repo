@@ -33,7 +33,6 @@
     function setup() {
       createCanvas(squareSize, squareSize);
       background(255);
-      strokeWeight(0.5); // Smaller dots for points
       drawBase();
       // Update points per frame from slider
       document.getElementById('pointsSlider').addEventListener('input', function() {
@@ -45,7 +44,6 @@
     function drawBase() {
       background(255);
       noFill();
-      strokeWeight(1); // Normal stroke for shapes
       stroke(0);
       arc(0, 0, squareSize * 2, squareSize * 2, 0, HALF_PI);
       rect(0, 0, squareSize, squareSize);
@@ -55,71 +53,6 @@
       if (!isRunning) return;
       translate(squareSize / 2, squareSize / 2);
       scale(squareSize / 2, squareSize / 2);
-      strokeWeight(0.5); // Ensure small dots for points
-
-      for (let i = 0; i < pointsPerFrame;譆
-
-System: The provided code was cut off mid-sentence. I'll complete the code and ensure it’s fully functional, correcting the typo in the event listener (`adddEventListener` to `addEventListener`) and maintaining all requested features: smaller dots, user controls (start/pause, reset, points-per-frame slider), and the Monte Carlo π estimation simulation. Below is the complete, corrected HTML code.
-
-<xaiArtifact artifact_id="634c71d8-df95-46a9-91dc-765cc226d03a" artifact_version_id="65a78588-e8f3-40b0-971f-60a8e39d2c31" title="index.html" contentType="text/html">
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Estimating π Using Monte Carlo with Controls</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
-  <style>
-    body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f0f0; }
-    canvas { border: 1px solid #000; }
-    #controls { margin-left: 20px; font-family: Arial, sans-serif; }
-    button { margin: 5px; padding: 8px 16px; cursor: pointer; }
-    label { display: block; margin: 10px 0; }
-  </style>
-</head>
-<body>
-  <div id="controls">
-    <h2>Estimating π</h2>
-    <p>Total Points: <span id="total">0</span></p>
-    <p>Points Inside: <span id="inside">0</span></p>
-    <p>Estimated π: <span id="pi">0</span></p>
-    <label>Points per frame: <input type="range" id="pointsSlider" min="1" max="500" value="100"></label>
-    <p>Points per frame: <span id="pointsPerFrame">100</span></p>
-    <button onclick="toggleSimulation()">Start</button>
-    <button onclick="resetSimulation()">Reset</button>
-  </div>
-  <script>
-    let totalPoints = 0;
-    let insidePoints = 0;
-    const squareSize = 400;
-    let pointsPerFrame = 100;
-    let isRunning = false;
-
-    function setup() {
-      createCanvas(squareSize, squareSize);
-      background(255);
-      strokeWeight(0.5); // Smaller dots for points
-      drawBase();
-      // Update points per frame from slider
-      document.getElementById('pointsSlider').addEventListener('input', function() {
-        pointsPerFrame = parseInt(this.value);
-        document.getElementById('pointsPerFrame').textContent = pointsPerFrame;
-      });
-    }
-
-    function drawBase() {
-      background(255);
-      noFill();
-      strokeWeight(1); // Normal stroke for shapes
-      stroke(0);
-      arc(0, 0, squareSize * 2, squareSize * 2, 0, HALF_PI);
-      rect(0, 0, squareSize, squareSize);
-    }
-
-    function draw() {
-      if (!isRunning) return;
-      translate(squareSize / 2, squareSize / 2);
-      scale(squareSize / 2, squareSize / 2);
-      strokeWeight(0.5); // Ensure small dots for points
 
       for (let i = 0; i < pointsPerFrame; i++) {
         let x = random(-1, 1);
@@ -134,7 +67,7 @@ System: The provided code was cut off mid-sentence. I'll complete the code and e
         }
         point(x, y);
 
-        let piEstimate = totalPoints > 0 ? (4 * insidePoints) / totalPoints : 0;
+        let piEstimate = (4 * insidePoints) / totalPoints;
         document.getElementById('total').textContent = totalPoints;
         document.getElementById('inside').textContent = insidePoints;
         document.getElementById('pi').textContent = piEstimate.toFixed(6);
