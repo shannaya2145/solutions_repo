@@ -1,4 +1,6 @@
 # Problem 1
+
+[Simulation](Simulatio_Circuits.HTML)
 ## Algorithm for Equivalent Resistance Using Graph Theory
 
 The algorithm models an electrical circuit as an undirected weighted graph:
