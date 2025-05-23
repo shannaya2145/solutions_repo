@@ -1,12 +1,12 @@
 # Problem 1
 
 
-### Step-by-Step Solution
-
 #### 1. **Setup and Measurements**
 - **Materials**: A string (1.5 m long), a small weight (e.g., a key chain), a stopwatch, and a ruler.
 - **Length Measurement**: Suppose the length $L$ of the pendulum (from the suspension point to the center of the weight) is measured as $L = 1.50 \, \text{m}$. Assume the ruler has a resolution of $1 \, \text{mm} = 0.001 \, \text{m}$.
-  - Uncertainty in length: $\Delta L = \frac{\text{Ruler Resolution}}{2} = \frac{0.001}{2} = 0.0005 \, \text{m}$.
+  - Uncertainty in length:
+  
+   $\Delta L = \frac{\text{Ruler Resolution}}{2} = \frac{0.001}{2} = 0.0005 \, \text{m}$.
 
 - **Time Measurement**: Displace the pendulum by a small angle ($<15^\circ$) and measure the time for 10 full oscillations ($T_{10}$). Repeat this 10 times. Suppose the measurements are:
   - $T_{10}$ values (in seconds): 24.5, 24.6, 24.4, 24.7, 24.5, 24.6, 24.5, 24.4, 24.6, 24.5.
