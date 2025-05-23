@@ -9,8 +9,11 @@
 #### Objective
 The Central Limit Theorem (CLT) states that the distribution of the sample mean $\bar{X}$ of a random sample of size $n$ from a population with mean $\mu$ and variance $\sigma^2$ approaches a normal distribution as $n$ increases, regardless of the population’s distribution. This project aims to:
 1. Simulate sampling distributions for different population distributions.
+
 2. Visualize the convergence of sample means to a normal distribution.
+
 3. Explore the influence of population shape and variance on convergence.
+
 4. Discuss real-world applications of the CLT.
 
 #### Methodology
