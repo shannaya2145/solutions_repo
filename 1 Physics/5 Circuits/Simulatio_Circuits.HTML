@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equivalent Resistance Simulation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.23.0/cytoscape.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #cy {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #333;
+            background-color: white;
+        }
+        #controls {
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Equivalent Resistance Simulation</h1>
+    <div id="controls">
+        <button onclick="startSimulation()">Start Simulation</button>
+        <button onclick="resetGraph(1)">Example 1</button>
+        <button onclick="resetGraph(2)">Example 2</button>
+        <button onclick="resetGraph(3)">Example 3</button>
+    </div>
+    <div id="cy"></div>
+    <div id="output">Equivalent Resistance: Not calculated yet</div>
+
+    <script>
+        let cy;
+        let currentGraph;
+        const examples = [
+            // Example 1: Series (2Ω, 3Ω) in parallel with 5Ω
+            {
+                nodes: [
+                    { data: { id: 'S', label: 'S' } },
+                    { data: { id: 'A', label: 'A' } },
+                    { data: { id: 'T', label: 'T' } }
+                ],
+                edges: [
+                    { data: { source: 'S', target: 'A', resistance: 2, label: '2Ω' } },
+                    { data: { source: 'A', target: 'T', resistance: 3, label: '3Ω' } },
+                    { data: { source: 'S', target: 'T', resistance: 5, label: '5Ω' } }
+                ]
+            },
+            // Example 2: Parallel (4Ω, 6Ω) in series with 2Ω
+            {
+                nodes: [
+                    { data: { id: 'S', label: 'S' } },
+                    { data: { id: 'A', label: 'A' } },
+                    { data: { id: 'T', label: 'T' } }
+                ],
+                edges: [
+                    { data: { source: 'S', target: 'A', resistance: 4, label: '4Ω' } },
+                    { data: { source: 'S', target: 'A', resistance: 6, label: '6Ω' } },
+                    { data: { source: 'A', target: 'T', resistance: 2, label: '2Ω' } }
+                ]
+            },
+            // Example 3: Square with diagonal (1Ω, 2Ω, 3Ω, 4Ω, 5Ω)
+            {
+                nodes: [
+                    { data: { id: 'S', label: 'S' } },
+                    { data: { id: 'A', label: 'A' } },
+                    { data: { id: 'B', label: 'B' } },
+                    { data: { id: 'T', label: 'T' } }
+                ],
+                edges: [
+                    { data: { source: 'S', target: 'A', resistance: 1, label: '1Ω' } },
+                    { data: { source: 'A', target: 'T', resistance: 2, label: '2Ω' } },
+                    { data: { source: 'S', target: 'B', resistance: 3, label: '3Ω' } },
+                    { data: { source: 'B', target: 'T', resistance: 4, label: '4Ω' } },
+                    { data: { source: 'S', target: 'T', resistance: 5, label: '5Ω' } }
+                ]
+            }
+        ];
+
+        function initializeGraph(exampleIndex) {
+            currentGraph = examples[exampleIndex];
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+                elements: currentGraph,
+                style: [
+                    {
+                        selector: 'node',
+                        style: {
+                            'label': 'data(label)',
+                            'background-color': '#0074D9',
+                            'color': '#fff',
+                            'text-valign': 'center',
+                            'text-halign': 'center',
+                            'width': '40px',
+                            'height': '40px'
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 3,
+                            'line-color': '#333',
+                            'label': 'data(label)',
+                            'font-size': '12px',
+                            'text-rotation': 'autorotate',
+                            'color': '#333'
+                        }
+                    }
+                ],
+                layout: { name: 'cose', animate: true }
+            });
+            document.getElementById('output').innerText = 'Equivalent Resistance: Not calculated yet';
+        }
+
+        function resetGraph(exampleIndex) {
+            initializeGraph(exampleIndex);
+        }
+
+        async function startSimulation() {
+            document.getElementById('output').innerText = 'Simulating...';
+            while (cy.nodes().length > 2 || cy.edges('[source="S"][target="T"]').length > 1) {
+                // Series Reduction
+                let seriesNode = cy.nodes().filter(n => n.id() !== 'S' && n.id() !== 'T' && n.degree() === 2);
+                if (seriesNode.length > 0) {
+                    let node = seriesNode[0];
+                    let edges = node.connectedEdges();
+                    let n1 = edges[0].source().id() === node.id() ? edges[0].target() : edges[0].source();
+                    let n2 = edges[1].source().id() === node.id() ? edges[1].target() : edges[1].source();
+                    let r1 = edges[0].data('resistance');
+                    let r2 = edges[1].data('resistance');
+                    let r_eq = r1 + r2;
+
+                    // Animate series reduction
+                    await animateEdgeHighlight(edges[0], '#ff0000');
+                    await animateEdgeHighlight(edges[1], '#ff0000');
+                    cy.remove(edges);
+                    cy.remove(node);
+                    cy.add({
+                        group: 'edges',
+                        data: {
+                            source: n1.id(),
+                            target: n2.id(),
+                            resistance: r_eq,
+                            label: `${r_eq.toFixed(2)}Ω`
+                        }
+                    });
+                    await animateLayout();
+                    continue;
+                }
+
+                // Parallel Reduction
+                let parallelEdges = findParallelEdges();
+                if (parallelEdges.length > 0) {
+                    let source = parallelEdges[0].source();
+                    let target = parallelEdges[0].target();
+                    let resistances = parallelEdges.map(e => e.data('resistance'));
+                    let r_eq = 1 / resistances.reduce((sum, r) => sum + 1/r, 0);
+
+                    // Animate parallel reduction
+                    for (let edge of parallelEdges) {
+                        await animateEdgeHighlight(edge, '#00ff00');
+                    }
+                    cy.remove(parallelEdges);
+                    cy.add({
+                        group: 'edges',
+                        data: {
+                            source: source.id(),
+                            target: target.id(),
+                            resistance: r_eq,
+                            label: `${r_eq.toFixed(2)}Ω`
+                        }
+                    });
+                    await animateLayout();
+                    continue;
+                }
+
+                // No reductions possible
+                break;
+            }
+
+            let finalEdge = cy.edges('[source="S"][target="T"]');
+            if (finalEdge.length === 1) {
+                let r_eq = finalEdge[0].data('resistance');
+                document.getElementById('output').innerText = `Equivalent Resistance: ${r_eq.toFixed(2)}Ω`;
+            } else {
+                document.getElementById('output').innerText = 'Error: Graph not reducible';
+            }
+        }
+
+        function findParallelEdges() {
+            let edgeGroups = {};
+            cy.edges().forEach(edge => {
+                let key = [edge.source().id(), edge.target().id()].sort().join('-');
+                if (!edgeGroups[key]) edgeGroups[key] = [];
+                edgeGroups[key].push(edge);
+            });
+            return Object.values(edgeGroups).find(group => group.length > 1) || [];
+        }
+
+        function animateEdgeHighlight(edge, color) {
+            return new Promise(resolve => {
+                edge.animate({
+                    style: { 'line-color': color, 'width': 6 }
+                }, {
+                    duration: 500
+                }).animate({
+                    style: { 'line-color': '#333', 'width': 3 }
+                }, {
+                    duration: 500,
+                    complete: resolve
+                });
+            });
+        }
+
+        function animateLayout() {
+            return new Promise(resolve => {
+                cy.layout({ name: 'cose', animate: true, animationDuration: 500 }).run();
+                setTimeout(resolve, 600);
+            });
+        }
+
+        // Initialize with Example 1
+        initializeGraph(0);
+    </script>
+</body>
+</html>
