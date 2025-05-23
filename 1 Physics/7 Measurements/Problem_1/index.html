@@ -92,17 +92,19 @@
 <ul class="current">
 <li class="toctree-l2 current"><a class="reference internal current" href="#">Problem 1</a>
 <ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="#deliverable-1-tabulated-data-in-markdown">Deliverable 1: Tabulated Data in Markdown</a>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#deliverable-2-discussion-on-sources-of-uncertainty-and-their-impact">Deliverable 2: Discussion on Sources of Uncertainty and Their Impact</a>
+<li class="toctree-l3"><a class="reference internal" href="#step-by-step-solution">Step-by-Step Solution</a>
 <ul>
-<li class="toctree-l4"><a class="reference internal" href="#comparison-with-standard-value">Comparison with Standard Value</a>
+<li class="toctree-l4"><a class="reference internal" href="#1-setup-and-measurements">1. Setup and Measurements</a>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#sources-of-uncertainty">Sources of Uncertainty</a>
+<li class="toctree-l4"><a class="reference internal" href="#2-calculations">2. Calculations</a>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#impact-on-results">Impact on Results</a>
+<li class="toctree-l4"><a class="reference internal" href="#3-analysis">3. Analysis</a>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#4-deliverables">4. Deliverables</a>
 </li>
 </ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#final-answer">Final Answer</a>
 </li>
 </ul>
 </li>
@@ -184,120 +186,178 @@
 <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
 <div class="section" itemprop="articleBody">
 <h1 id="problem-1">Problem 1</h1>
-<h3 id="deliverable-1-tabulated-data-in-markdown">Deliverable 1: Tabulated Data in Markdown</h3>
-<p>Let's assume the following measurements based on the procedure:</p>
+<h3 id="step-by-step-solution">Step-by-Step Solution</h3>
+<h4 id="1-setup-and-measurements">1. <strong>Setup and Measurements</strong></h4>
 <ul>
-<li><strong>Length of the pendulum (<span class="arithmatex">\(L\)</span>)</strong>: Measured as 1.000 m using a ruler with a resolution of 0.001 m (1 mm).  </li>
+<li><strong>Materials</strong>: A string (1.5 m long), a small weight (e.g., a key chain), a stopwatch, and a ruler.</li>
+<li><strong>Length Measurement</strong>: Suppose the length <span class="arithmatex">\(L\)</span> of the pendulum (from the suspension point to the center of the weight) is measured as <span class="arithmatex">\(L = 1.50 \, \text{m}\)</span>. Assume the ruler has a resolution of <span class="arithmatex">\(1 \, \text{mm} = 0.001 \, \text{m}\)</span>.</li>
 <li>
-<p>Uncertainty in length (<span class="arithmatex">\(\Delta L\)</span>) = (Ruler Resolution) / 2 = 0.001 / 2 = 0.0005 m.</p>
+<p>Uncertainty in length: <span class="arithmatex">\(\Delta L = \frac{\text{Ruler Resolution}}{2} = \frac{0.001}{2} = 0.0005 \, \text{m}\)</span>.</p>
 </li>
 <li>
-<p><strong>Time for 10 oscillations (<span class="arithmatex">\(T_{10}\)</span>)</strong>: Measured 10 times using a stopwatch. Let's assume the following values (in seconds):<br/>
-  20.1, 20.2, 20.0, 20.3, 20.1, 20.2, 20.0, 20.1, 20.2, 20.1.</p>
+<p><strong>Time Measurement</strong>: Displace the pendulum by a small angle (<span class="arithmatex">\(&lt;15^\circ\)</span>) and measure the time for 10 full oscillations (<span class="arithmatex">\(T_{10}\)</span>). Repeat this 10 times. Suppose the measurements are:</p>
+</li>
+<li><span class="arithmatex">\(T_{10}\)</span> values (in seconds): 24.5, 24.6, 24.4, 24.7, 24.5, 24.6, 24.5, 24.4, 24.6, 24.5.</li>
+<li>Mean time for 10 oscillations: 
+    $$
+    \overline{T}_{10} = \frac{24.5 + 24.6 + 24.4 + 24.7 + 24.5 + 24.6 + 24.5 + 24.4 + 24.6 + 24.5}{10} = 24.53 \, \text{s}
+    $$</li>
+<li>
+<p>Standard deviation (<span class="arithmatex">\(\sigma_T\)</span>) of the <span class="arithmatex">\(T_{10}\)</span> measurements:</p>
+<ul>
+<li>Variance: <span class="arithmatex">\(\sigma_T^2 = \frac{\sum (T_{10,i} - \overline{T}_{10})^2}{n-1}\)</span></li>
+<li>
+<p>Differences from mean: <span class="arithmatex">\(-0.03, 0.07, -0.13, 0.17, -0.03, 0.07, -0.03, -0.13, 0.07, -0.03\)</span></p>
 </li>
 <li>
-<p><strong>Mean time for 10 oscillations (<span class="arithmatex">\(\bar{T}_{10}\)</span>)</strong>:<br/>
-<span class="arithmatex">\(\bar{T}_{10} = \frac{20.1 + 20.2 + 20.0 + 20.3 + 20.1 + 20.2 + 20.0 + 20.1 + 20.2 + 20.1}{10} = \frac{201.3}{10} = 20.13 \, \text{s}\)</span>.</p>
+<p>Squared differences: $0.0009, 0.0049, 0.0169, 0.0289, 0.0009, 0.0049, </p>
+</li>
+</ul>
+<p>0.0009, 0.0169, 0.0049, 0.0009$
+- Sum: <span class="arithmatex">\(0.0801\)</span>
+- Variance: <span class="arithmatex">\(\frac{0.0801}{9} = 0.0089\)</span>
+- Standard deviation: <span class="arithmatex">\(\sigma_T = \sqrt{0.0089} \approx 0.094 \, \text{s}\)</span>.
+  - Uncertainty in the mean time: 
+$$
+\Delta T_{10} = \frac{\sigma_T}{\sqrt{n}} = \frac{0.094}{\sqrt{10}} \approx 0.030 \, \text{s}
+$$</p>
+</li>
+</ul>
+<h4 id="2-calculations">2. <strong>Calculations</strong></h4>
+<ol>
+<li>
+<p><strong>Calculate the Period</strong>:
+   $$
+   T = \frac{\overline{T}<em>{10}}{10} = \frac{24.53}{10} = 2.453 \, \text{s}
+   $$
+   $$
+   \Delta T = \frac{\Delta T</em>{10}}{10} = \frac{0.030}{10} = 0.003 \, \text{s}
+   $$</p>
 </li>
 <li>
-<p><strong>Standard deviation of <span class="arithmatex">\(T_{10}\)</span> (<span class="arithmatex">\(\sigma_T\)</span>)</strong>:<br/>
-  First, calculate the variance:  </p>
+<p><strong>Determine <span class="arithmatex">\(g\)</span></strong>:
+   The period of a simple pendulum is given by:
+   $$
+   T = 2\pi \sqrt{\frac{L}{g}}
+   $$
+   Rearrange for <span class="arithmatex">\(g\)</span>:
+   $$
+   g = \frac{4\pi^2 L}{T^2}
+   $$
+   Substitute <span class="arithmatex">\(L = 1.50 \, \text{m}\)</span>, <span class="arithmatex">\(T = 2.453 \, \text{s}\)</span>:
+   $$
+   T^2 = (2.453)^2 \approx 6.017 \, \text{s}^2
+   $$
+   $$
+   g = \frac{4 \pi^2 (1.50)}{6.017} = \frac{4 \times (3.1416)^2 \times 1.50}{6.017} \approx \frac{59.22}{6.017} \approx 9.84 \, \text{m/s}^2
+   $$</p>
 </li>
-</ul>
-<p><span class="arithmatex">\(\sigma_T^2 = \frac{(20.1-20.13)^2 + (20.2-20.13)^2 + (20.0-20.13)^2 + \ldots + (20.1-20.13)^2}{10}\)</span> </p>
-<p><span class="arithmatex">\(= \frac{(-0.03)^2 + (0.07)^2 + (-0.13)^2 + (0.17)^2 + (-0.03)^2 + (0.07)^2 + (-0.13)^2 + (-0.03)^2 + (0.07)^2 + (-0.03)^2}{10}\)</span> </p>
-<p><span class="arithmatex">\(= \frac{0.0009 + 0.0049 + 0.0169 + 0.0289 + 0.0009 + 0.0049 + 0.0169 + 0.0009 + 0.0049 + 0.0009}{10} = \frac{0.0811}{10} = 0.00811\)</span>.  </p>
-<p>So, <span class="arithmatex">\(\sigma_T = \sqrt{0.00811} \approx 0.090 \, \text{s}\)</span>.</p>
+<li>
+<p><strong>Propagate Uncertainties</strong>:
+   The uncertainty in <span class="arithmatex">\(g\)</span> is:
+   $$
+   \Delta g = g \sqrt{\left(\frac{\Delta L}{L}\right)^2 + \left(\frac{2 \Delta T}{T}\right)^2}
+   $$</p>
+</li>
+<li><span class="arithmatex">\(\frac{\Delta L}{L} = \frac{0.0005}{1.50} \approx 0.000333\)</span></li>
+<li><span class="arithmatex">\(\frac{2 \Delta T}{T} = \frac{2 \times 0.003}{2.453} \approx 0.00245\)</span></li>
+<li>Combined: 
+     $$
+     \sqrt{(0.000333)^2 + (0.00245)^2} \approx \sqrt{0.00000011 + 0.000006} \approx \sqrt{0.00000611} \approx 0.00247
+     $$</li>
+<li><span class="arithmatex">\(\Delta g = 9.84 \times 0.00247 \approx 0.024 \, \text{m/s}^2\)</span></li>
+</ol>
+<p>So, <span class="arithmatex">\(g = 9.84 \pm 0.02 \, \text{m/s}^2\)</span>.</p>
+<h4 id="3-analysis">3. <strong>Analysis</strong></h4>
+<ol>
+<li>
+<p><strong>Comparison with Standard Value</strong>:
+   The standard value of
+    <span class="arithmatex">\(g\)</span> is <span class="arithmatex">\(9.81 \, \text{m/s}^2\)</span>. The measured </p>
+<p><span class="arithmatex">\(g = 9.84 \pm 0.02 \, \text{m/s}^2\)</span> is slightly higher but within a reasonable range, considering the uncertainty overlaps with the standard value </p>
+<p>(<span class="arithmatex">\(9.84 - 0.02 = 9.82\)</span>, which is close to 9.81).</p>
+</li>
+<li>
+<p><strong>Discussion</strong>:</p>
+</li>
+<li><strong>Effect of Measurement Resolution on <span class="arithmatex">\(\Delta L\)</span></strong>: The ruler's resolution (<span class="arithmatex">\(0.001 \, \text{m}\)</span>) leads to a small <span class="arithmatex">\(\Delta L = 0.0005 \, \text{m}\)</span>, contributing minimally to the uncertainty in <span class="arithmatex">\(g\)</span> (<span class="arithmatex">\(\frac{\Delta L}{L} \approx 0.000333\)</span>). A more precise tool (e.g., a caliper) could reduce this further.</li>
+<li><strong>Variability in Timing and Impact on <span class="arithmatex">\(\Delta T\)</span></strong>: The standard deviation in <span class="arithmatex">\(T_{10}\)</span> (<span class="arithmatex">\(\sigma_T \approx 0.094 \, \text{s}\)</span>) reflects variability in timing, likely due to human reaction time or slight variations in the pendulum's motion. This contributes more significantly to <span class="arithmatex">\(\Delta g\)</span> via <span class="arithmatex">\(\frac{2 \Delta T}{T} \approx 0.00245\)</span>.</li>
+<li>
+<p><strong>Assumptions and Limitations</strong>:</p>
 <ul>
-<li><strong>Uncertainty in the mean time (<span class="arithmatex">\(\Delta T_{10}\)</span>)</strong>:  </li>
+<li>Assumes small-angle approximation </li>
 </ul>
-<p><span class="arithmatex">\(\Delta T_{10} = \frac{\sigma_T}{\sqrt{n}} = \frac{0.090}{\sqrt{10}} \approx \frac{0.090}{3.162} \approx 0.028 \, \text{s}\)</span>.</p>
-<ul>
-<li><strong>Period (<span class="arithmatex">\(T\)</span>) and its uncertainty (<span class="arithmatex">\(\Delta T\)</span>)</strong>:  </li>
-</ul>
-<p><span class="arithmatex">\(T = \frac{\bar{T}_{10}}{10} = \frac{20.13}{10} = 2.013 \, \text{s}\)</span>,  </p>
-<p><span class="arithmatex">\(\Delta T = \frac{\Delta T_{10}}{10} = \frac{0.028}{10} = 0.0028 \, \text{s}\)</span>.</p>
-<ul>
-<li><strong>Gravitational acceleration (<span class="arithmatex">\(g\)</span>)</strong>: </li>
-</ul>
-<p><span class="arithmatex">\(g = \frac{4\pi^2 L}{T^2} = \frac{4 \times (3.1416)^2 \times 1.000}{(2.013)^2} = \frac{4 \times 9.8696 \times 1.000}{4.0522} \approx \frac{39.4784}{4.0522} \approx 9.74 \, \text{m/s}^2\)</span>.</p>
-<ul>
-<li><strong>Uncertainty in <span class="arithmatex">\(g\)</span> (<span class="arithmatex">\(\Delta g\)</span>)</strong>:  </li>
-</ul>
-<p><span class="arithmatex">\(\Delta g = g \sqrt{\left( \frac{\Delta L}{L} \right)^2 + \left( 2 \frac{\Delta T}{T} \right)^2}\)</span> </p>
-<p><span class="arithmatex">\(\frac{\Delta L}{L} = \frac{0.0005}{1.000} = 0.0005\)</span>,  </p>
-<p><span class="arithmatex">\(\frac{\Delta T}{T} = \frac{0.0028}{2.013} \approx 0.00139\)</span>, </p>
-<p><span class="arithmatex">\(\Delta g = 9.74 \sqrt{(0.0005)^2 + (2 \times 0.00139)^2} = 9.74 \sqrt{0.00000025 + (0.00278)^2} = 9.74 \sqrt{0.00000025 + 0.00000773} \approx 9.74 \sqrt{0.00000798} \approx 9.74 \times 0.00283 \approx 0.028 \, \text{m/s}^2\)</span>.</p>
-<p>Now, let's tabulate the data in Markdown:</p>
+<p>(<span class="arithmatex">\(&lt;15^\circ\)</span>) for the pendulum equation to hold.
+ - Neglects air resistance and the mass of the string, which could slightly affect the period.
+ - Human error in timing with a stopwatch may introduce systematic bias.</p>
+</li>
+</ol>
+<h4 id="4-deliverables">4. <strong>Deliverables</strong></h4>
+<ol>
+<li><strong>Tabulated Data</strong>:</li>
+</ol>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
 <th>Value</th>
-<th>Uncertainty</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><span class="arithmatex">\(L\)</span></td>
-<td>1.000 m</td>
-<td><span class="arithmatex">\(\Delta L\)</span> = 0.0005 m</td>
+<td>1.50 m</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(T_{10}\)</span> (10 measurements)</td>
-<td>20.1, 20.2, 20.0, 20.3, 20.1, 20.2, 20.0, 20.1, 20.2, 20.1 s</td>
-<td>-</td>
+<td><span class="arithmatex">\(\Delta L\)</span></td>
+<td>0.0005 m</td>
 </tr>
 <tr>
-<td><span class="arithmatex">\(\bar{T}_{10}\)</span></td>
-<td>20.13 s</td>
-<td><span class="arithmatex">\(\Delta T_{10}\)</span> = 0.028 s</td>
+<td><span class="arithmatex">\(T_{10}\)</span> (measurements)</td>
+<td>24.5, 24.6, 24.4, 24.7, 24.5, 24.6, 24.5, 24.4, 24.6, 24.5 s</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\overline{T}_{10}\)</span></td>
+<td>24.53 s</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(\sigma_T\)</span></td>
-<td>0.090 s</td>
-<td>-</td>
+<td>0.094 s</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Delta T_{10}\)</span></td>
+<td>0.030 s</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(T\)</span></td>
-<td>2.013 s</td>
-<td><span class="arithmatex">\(\Delta T\)</span> = 0.0028 s</td>
+<td>2.453 s</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Delta T\)</span></td>
+<td>0.003 s</td>
 </tr>
 <tr>
 <td><span class="arithmatex">\(g\)</span></td>
-<td>9.74 m/s²</td>
-<td><span class="arithmatex">\(\Delta g\)</span> = 0.028 m/s²</td>
+<td>9.84 m/s²</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\Delta g\)</span></td>
+<td>0.02 m/s²</td>
 </tr>
 </tbody>
 </table>
-<hr/>
-<h3 id="deliverable-2-discussion-on-sources-of-uncertainty-and-their-impact">Deliverable 2: Discussion on Sources of Uncertainty and Their Impact</h3>
-<h4 id="comparison-with-standard-value">Comparison with Standard Value</h4>
-<p>The calculated <span class="arithmatex">\(g = 9.74 \pm 0.028 \, \text{m/s}^2\)</span> can be compared to the standard value of <span class="arithmatex">\(g = 9.81 \, \text{m/s}^2\)</span>. The measured value is slightly lower by about 0.07 m/s², but the standard value lies just outside the uncertainty range (9.74 + 0.028 = 9.768 m/s²). This suggests possible systematic errors or environmental factors affecting the measurement.</p>
-<h4 id="sources-of-uncertainty">Sources of Uncertainty</h4>
 <ol>
-<li>
-<p><strong>Measurement Resolution of Length (<span class="arithmatex">\(\Delta L\)</span>)</strong>:<br/>
-   The ruler's resolution (1 mm) contributes to <span class="arithmatex">\(\Delta L = 0.0005 \, \text{m}\)</span>. This uncertainty propagates to <span class="arithmatex">\(g\)</span> through the term <span class="arithmatex">\(\frac{\Delta L}{L}\)</span>. For <span class="arithmatex">\(L = 1.000 \, \text{m}\)</span>, this relative uncertainty is small (0.05%), but it still impacts the final value of <span class="arithmatex">\(g\)</span>. Using a more precise tool, like a caliper with a resolution of 0.01 mm, would reduce <span class="arithmatex">\(\Delta L\)</span> to 0.000005 m, lowering the contribution to <span class="arithmatex">\(\Delta g\)</span>.</p>
-</li>
-<li>
-<p><strong>Timing Uncertainty (<span class="arithmatex">\(\Delta T_{10}\)</span>)</strong>:<br/>
-   The stopwatch measurements have variability, reflected in <span class="arithmatex">\(\sigma_T = 0.090 \, \text{s}\)</span>. Human reaction time in starting and stopping the stopwatch likely contributes to this. The uncertainty in the mean (<span class="arithmatex">\(\Delta T_{10} = 0.028 \, \text{s}\)</span>) propagates to <span class="arithmatex">\(T\)</span>, and since <span class="arithmatex">\(g \propto \frac{1}{T^2}\)</span>, the relative uncertainty in <span class="arithmatex">\(T\)</span> is doubled in <span class="arithmatex">\(g\)</span>. Using an automated timing system (e.g., a photogate) could reduce this error.</p>
-</li>
-<li>
-<p><strong>Systematic Errors</strong>:  </p>
-</li>
-<li><strong>Air Resistance</strong>: The pendulum's motion may be slightly damped, increasing the measured period and lowering <span class="arithmatex">\(g\)</span>.  </li>
-<li><strong>Angle of Displacement</strong>: The procedure specifies a small angle (&lt;15°), but if the angle is too large, the small-angle approximation </li>
+<li><strong>Discussion on Sources of Uncertainty</strong>:</li>
+<li>The uncertainty in <span class="arithmatex">\(L\)</span> (<span class="arithmatex">\(\Delta L\)</span>) is small due to the high precision of the ruler, but it still contributes to <span class="arithmatex">\(\Delta g\)</span>.</li>
+<li>The uncertainty in timing (<span class="arithmatex">\(\Delta T\)</span>) is more significant due to variability in the stopwatch measurements, likely from reaction time errors.</li>
+<li>Assumptions like neglecting air resistance and assuming a point mass may lead to a slight overestimation of <span class="arithmatex">\(g\)</span>. These factors suggest the result is reasonably accurate but could be improved with more precise timing methods (e.g., a photogate) and a controlled environment.</li>
 </ol>
-<p>(<span class="arithmatex">\(T = 2\pi \sqrt{\frac{L}{g}}\)</span>) becomes less accurate, leading to errors in <span class="arithmatex">\(g\)</span>.<br/>
-   - <strong>Non-Uniform <span class="arithmatex">\(g\)</span></strong>: The local value of <span class="arithmatex">\(g\)</span> depends on altitude and latitude. At sea level, <span class="arithmatex">\(g \approx 9.81 \, \text{m/s}^2\)</span>, but it decreases with altitude, which might explain the slightly lower measured value.</p>
-<h4 id="impact-on-results">Impact on Results</h4>
+<hr/>
+<h3 id="final-answer">Final Answer</h3>
 <ul>
-<li>The uncertainty in <span class="arithmatex">\(T\)</span> has a larger impact on <span class="arithmatex">\(\Delta g\)</span> because of the factor of 2 in the error propagation formula (<span class="arithmatex">\(2 \frac{\Delta T}{T}\)</span>). In this case, <span class="arithmatex">\(2 \frac{\Delta T}{T} \approx 0.00278\)</span>, which dominates over <span class="arithmatex">\(\frac{\Delta L}{L} = 0.0005\)</span>.  </li>
-<li>Improving the timing precision would have the most significant effect on reducing <span class="arithmatex">\(\Delta g\)</span>. For example, reducing <span class="arithmatex">\(\sigma_T\)</span> to 0.045 s (e.g., with better equipment) would halve <span class="arithmatex">\(\Delta T_{10}\)</span>, reducing <span class="arithmatex">\(\Delta g\)</span> to approximately 0.021 m/s², bringing the measured <span class="arithmatex">\(g\)</span> closer to the standard value within uncertainty.</li>
+<li>Measured <span class="arithmatex">\(g = 9.84 \pm 0.02 \, \text{m/s}^2\)</span>, which is close to the standard <span class="arithmatex">\(9.81 \, \text{m/s}^2\)</span>.</li>
+<li>Main uncertainties arise from timing variability, with minor contributions from length measurement. Limitations include the small-angle approximation and neglected effects like air resistance.</li>
 </ul>
-<p>In conclusion, while the experiment yields a reasonable estimate of <span class="arithmatex">\(g\)</span>, refining the timing method and accounting for systematic effects like air resistance and local variations in <span class="arithmatex">\(g\)</span> would improve accuracy and precision.</p>
 </div>
 </div><footer>
 <div aria-label="Footer Navigation" class="rst-footer-buttons" role="navigation">
